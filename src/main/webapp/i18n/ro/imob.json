@@ -1,0 +1,51 @@
+{
+  "imoReviewApp": {
+    "imob": {
+      "home": {
+        "title": "Anunturi",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Creeare o nouă entitate anunt",
+        "createOrEditLabel": "Creeare sau editare anunt",
+        "notFound": "Nu a fost gasit nici un anunt"
+      },
+      "created": "Anuntul dumneavoastra a fost adaugat cu codul de identificare: {{ param }}",
+      "updated": "Anuntul dumneavoastra cu codul de identificare {{ param }} a fost actualizat",
+      "deleted": "Anuntul dumneavoastra cu codul deidentificare {{ param }} a fost ștears",
+      "delete": {
+        "question": "Sunteți sigur că doriți să ștergeți anuntul cu numarul {{ id }}?"
+      },
+      "detail": {
+        "title": "Anunt"
+      },
+      "id": "ID",
+      "title": "Titlu",
+      "description": "Descriere",
+      "type": "Tip",
+      "categ": "Categorie",
+      "service": "Serviciu",
+      "price": "Pret",
+      "priceCurrency": "Valuta",
+      "tags": "Etichete",
+      "address": "Adresa",
+      "contact": "Contact",
+      "nbofRooms": "Nr. Camere",
+      "constrYear": "Anul Construirii",
+      "useSurface": "Suprafata Utila",
+      "builtSurface": "Suprafata construita",
+      "compart": "Compartimentare",
+      "confort": "Comfort",
+      "floor": "Etaj",
+      "nbofKitchens": "Numar de bucatarii",
+      "nbofBthrooms": "Numar de bai",
+      "unitType": "Tipul unitatii",
+      "unitHeight": "Inaltimea Unitatii",
+      "nbofBalconies": "Numar de balcoane",
+      "utilities": "Utilitati",
+      "features": "Facilitati",
+      "otherdetails": "Alte detalii",
+      "zoneDetails": "Detaliile zonei",
+      "availability": "Valabilitate",
+      "imobstouser": "Propietar"
+    }
+  }
+}

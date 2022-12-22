@@ -1,0 +1,140 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="imob">
+      <h2 data-cy="imobDetailsHeading"><span jhiTranslate="imoReviewApp.imob.detail.title">Imob</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ imob.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.title">Title</span></dt>
+        <dd>
+          <span>{{ imob.title }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.description">Description</span></dt>
+        <dd>
+          <span>{{ imob.description }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.type">Type</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'imoReviewApp.ImobType.' + imob.type }}">{{ imob.type }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.categ">Categ</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'imoReviewApp.ImobCateg.' + imob.categ }}">{{ imob.categ }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.service">Service</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'imoReviewApp.ImobServ.' + imob.service }}">{{ imob.service }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.price">Price</span></dt>
+        <dd>
+          <span>{{ imob.price }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.priceCurrency">Price Currency</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'imoReviewApp.Currency.' + imob.priceCurrency }}">{{ imob.priceCurrency }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.tags">Tags</span></dt>
+        <dd>
+          <span>{{ imob.tags }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.address">Address</span></dt>
+        <dd>
+          <span>{{ imob.address }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.contact">Contact</span></dt>
+        <dd>
+          <span>{{ imob.contact }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.nbofRooms">Nbof Rooms</span></dt>
+        <dd>
+          <span>{{ imob.nbofRooms }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.constrYear">Constr Year</span></dt>
+        <dd>
+          <span>{{ imob.constrYear | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.useSurface">Use Surface</span></dt>
+        <dd>
+          <span>{{ imob.useSurface }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.builtSurface">Built Surface</span></dt>
+        <dd>
+          <span>{{ imob.builtSurface }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.compart">Compart</span></dt>
+        <dd>
+          <span>{{ imob.compart }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.confort">Confort</span></dt>
+        <dd>
+          <span>{{ imob.confort }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.floor">Floor</span></dt>
+        <dd>
+          <span>{{ imob.floor }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.nbofKitchens">Nbof Kitchens</span></dt>
+        <dd>
+          <span>{{ imob.nbofKitchens }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.nbofBthrooms">Nbof Bthrooms</span></dt>
+        <dd>
+          <span>{{ imob.nbofBthrooms }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.unitType">Unit Type</span></dt>
+        <dd>
+          <span>{{ imob.unitType }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.unitHeight">Unit Height</span></dt>
+        <dd>
+          <span>{{ imob.unitHeight }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.nbofBalconies">Nbof Balconies</span></dt>
+        <dd>
+          <span>{{ imob.nbofBalconies }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.utilities">Utilities</span></dt>
+        <dd>
+          <span>{{ imob.utilities }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.features">Features</span></dt>
+        <dd>
+          <span>{{ imob.features }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.otherdetails">Otherdetails</span></dt>
+        <dd>
+          <span>{{ imob.otherdetails }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.zoneDetails">Zone Details</span></dt>
+        <dd>
+          <span>{{ imob.zoneDetails }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.availability">Availability</span></dt>
+        <dd>
+          <span>{{ imob.availability }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.imob.imobstouser">Imobstouser</span></dt>
+        <dd>
+          <span>{{ imob.imobstouser?.login }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Înapoi</span>
+      </button>
+
+      <button type="button" [routerLink]="['/imob', imob.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editare</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+{
+  "imoReviewApp": {
+    "ImobType": {
+      "null": "",
+      "APT": "Apartament",
+      "STD": "Studio",
+      "GRS": "Garsoniera",
+      "HSE": "Casa",
+      "VIL": "Vila",
+      "PNT": "Penthouse",
+      "DPX": "Duplex",
+      "TRC": "Teren constructie",
+      "TRA": "Teren agricol",
+      "BRO": "Birouri",
+      "SPC": "Spatiu comercial",
+      "SPI": "Spatiu Investitii",
+      "HTP": "Hotel/Pensiune",
+      "TRI": "Teren industrial",
+      "PSP": "PSP"
+    }
+  }
+}

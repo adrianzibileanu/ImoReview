@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="attachment">
+      <h2 data-cy="attachmentDetailsHeading"><span jhiTranslate="imoReviewApp.attachment.detail.title">Attachment</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ attachment.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.attachment.fileName">File Name</span></dt>
+        <dd>
+          <span>{{ attachment.fileName }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.attachment.originalFileName">Original File Name</span></dt>
+        <dd>
+          <span>{{ attachment.originalFileName }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.attachment.extension">Extension</span></dt>
+        <dd>
+          <span>{{ attachment.extension }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.attachment.sizeInBytes">Size In Bytes</span></dt>
+        <dd>
+          <span>{{ attachment.sizeInBytes }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.attachment.uploadedDate">Uploaded Date</span></dt>
+        <dd>
+          <span>{{ attachment.uploadedDate | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.attachment.sha256">Sha 256</span></dt>
+        <dd>
+          <span>{{ attachment.sha256 }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.attachment.contentType">Content Type</span></dt>
+        <dd>
+          <span>{{ attachment.contentType }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.attachment.manytomany">Manytomany</span></dt>
+        <dd>
+          <span *ngFor="let manytomany of attachment.manytomanies; let last = last"> {{ manytomany.login }}{{ last ? '' : ', ' }} </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Înapoi</span>
+      </button>
+
+      <button type="button" [routerLink]="['/attachment', attachment.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editare</span>
+      </button>
+    </div>
+  </div>
+</div>

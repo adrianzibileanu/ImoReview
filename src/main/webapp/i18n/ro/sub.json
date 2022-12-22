@@ -1,0 +1,28 @@
+{
+  "imoReviewApp": {
+    "sub": {
+      "home": {
+        "title": "Abonamente",
+        "refreshListLabel": "Actualizeaza lista",
+        "createLabel": "Creeare abonament nou",
+        "createOrEditLabel": "Creeare sau editare abonament",
+        "notFound": "Nici un abonament nu a fost gasit"
+      },
+      "created": "A fost creată un nou abonament cu identificatorul {{ param }}",
+      "updated": "Abonamentul cu numarul {{ param }} a fost actualizat",
+      "deleted": "Abonamentul cu numarul {{ param }} a fost ștears",
+      "delete": {
+        "question": "Sunteți sigur că doriți să ștergeți abonamentul cu numarul {{ id }}?"
+      },
+      "detail": {
+        "title": "Abonament"
+      },
+      "id": "ID",
+      "subscribed": "Abonat",
+      "active": "Activ",
+      "expirationDate": "Valabil pana la",
+      "type": "Tip",
+      "userID": "Utilizator"
+    }
+  }
+}

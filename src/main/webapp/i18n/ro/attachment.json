@@ -1,0 +1,31 @@
+{
+  "imoReviewApp": {
+    "attachment": {
+      "home": {
+        "title": "Attachments",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Creeare o nouă entitate Attachment",
+        "createOrEditLabel": "Creeare sau editare Attachment",
+        "notFound": "No Attachments found"
+      },
+      "created": "A fost creată o nouă entitate Attachment cu identificatorul {{ param }}",
+      "updated": "Attachment cu identificatorul {{ param }} a fost actualizată",
+      "deleted": "Attachment cu identificatorul {{ param }} a fost ștearsă",
+      "delete": {
+        "question": "Sunteți sigur că doriți să ștergeți Attachment {{ id }}?"
+      },
+      "detail": {
+        "title": "Attachment"
+      },
+      "id": "ID",
+      "fileName": "File Name",
+      "originalFileName": "Original File Name",
+      "extension": "Extension",
+      "sizeInBytes": "Size In Bytes",
+      "uploadedDate": "Uploaded Date",
+      "sha256": "Sha 256",
+      "contentType": "Content Type",
+      "manytomany": "Manytomany"
+    }
+  }
+}

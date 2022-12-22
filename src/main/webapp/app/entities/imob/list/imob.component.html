@@ -1,0 +1,287 @@
+<div>
+  <h2 id="page-heading" data-cy="ImobHeading">
+    <span jhiTranslate="imoReviewApp.imob.home.title">Imobs</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="imoReviewApp.imob.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-imob"
+        [routerLink]="['/imob/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="imoReviewApp.imob.home.createLabel"> Creeare o nouă entitate Imob </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="imobs?.length === 0">
+    <span jhiTranslate="imoReviewApp.imob.home.notFound">No Imobs found</span>
+  </div>
+
+  <div class="table-responsive table-entities" id="entities" *ngIf="imobs && imobs.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="title">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.title">Title</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="description">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.description">Description</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="type">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.type">Type</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="categ">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.categ">Categ</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="service">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.service">Service</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="price">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.price">Price</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="priceCurrency">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.priceCurrency">Price Currency</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="tags">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.tags">Tags</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="address">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.address">Address</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="contact">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.contact">Contact</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="nbofRooms">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.nbofRooms">Nbof Rooms</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="constrYear">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.constrYear">Constr Year</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="useSurface">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.useSurface">Use Surface</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="builtSurface">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.builtSurface">Built Surface</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="compart">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.compart">Compart</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="confort">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.confort">Confort</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="floor">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.floor">Floor</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="nbofKitchens">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.nbofKitchens">Nbof Kitchens</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="nbofBthrooms">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.nbofBthrooms">Nbof Bthrooms</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="unitType">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.unitType">Unit Type</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="unitHeight">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.unitHeight">Unit Height</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="nbofBalconies">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.nbofBalconies">Nbof Balconies</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="utilities">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.utilities">Utilities</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="features">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.features">Features</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="otherdetails">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.otherdetails">Otherdetails</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="zoneDetails">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.zoneDetails">Zone Details</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="availability">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.availability">Availability</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="imobstouser.login">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.imob.imobstouser">Imobstouser</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let imob of imobs; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/imob', imob.id, 'view']">{{ imob.id }}</a>
+          </td>
+          <td>{{ imob.title }}</td>
+          <td>{{ imob.description }}</td>
+          <td jhiTranslate="{{ 'imoReviewApp.ImobType.' + imob.type }}">{{ imob.type }}</td>
+          <td jhiTranslate="{{ 'imoReviewApp.ImobCateg.' + imob.categ }}">{{ imob.categ }}</td>
+          <td jhiTranslate="{{ 'imoReviewApp.ImobServ.' + imob.service }}">{{ imob.service }}</td>
+          <td>{{ imob.price }}</td>
+          <td jhiTranslate="{{ 'imoReviewApp.Currency.' + imob.priceCurrency }}">{{ imob.priceCurrency }}</td>
+          <td>{{ imob.tags }}</td>
+          <td>{{ imob.address }}</td>
+          <td>{{ imob.contact }}</td>
+          <td>{{ imob.nbofRooms }}</td>
+          <td>{{ imob.constrYear | formatMediumDate }}</td>
+          <td>{{ imob.useSurface }}</td>
+          <td>{{ imob.builtSurface }}</td>
+          <td>{{ imob.compart }}</td>
+          <td>{{ imob.confort }}</td>
+          <td>{{ imob.floor }}</td>
+          <td>{{ imob.nbofKitchens }}</td>
+          <td>{{ imob.nbofBthrooms }}</td>
+          <td>{{ imob.unitType }}</td>
+          <td>{{ imob.unitHeight }}</td>
+          <td>{{ imob.nbofBalconies }}</td>
+          <td>{{ imob.utilities }}</td>
+          <td>{{ imob.features }}</td>
+          <td>{{ imob.otherdetails }}</td>
+          <td>{{ imob.zoneDetails }}</td>
+          <td>{{ imob.availability }}</td>
+          <td>
+            {{ imob.imobstouser?.login }}
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['/imob', imob.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Vizualizare</span>
+              </button>
+
+              <button type="submit" [routerLink]="['/imob', imob.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editare</span>
+              </button>
+
+              <button type="submit" (click)="delete(imob)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Ștergere</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="imobs && imobs.length > 0">
+    <div class="d-flex justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [page]="page"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="navigateToPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

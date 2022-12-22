@@ -1,0 +1,36 @@
+{
+  "changelogDate": "20221221214450",
+  "fields": [
+    {
+      "fieldName": "subscribed",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "expirationDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "SubType",
+      "fieldValues": "MTH,ANN"
+    }
+  ],
+  "name": "Sub",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "sub",
+      "ownerSide": true,
+      "relationshipName": "userID",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "service": "no"
+}

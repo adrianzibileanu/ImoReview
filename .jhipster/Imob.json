@@ -1,0 +1,176 @@
+{
+  "changelogDate": "20221220230524",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": "30",
+      "fieldValidateRulesMinlength": "3"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": "1000",
+      "fieldValidateRulesMinlength": "3"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "ImobType",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "APT,STD,GRS,HSE,VIL,PNT,DPX,TRC,TRA,BRO,SPC,SPI,HTP,TRI,PSP"
+    },
+    {
+      "fieldName": "categ",
+      "fieldType": "ImobCateg",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "RZD,COMM"
+    },
+    {
+      "fieldName": "service",
+      "fieldType": "ImobServ",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "RENT,BUY"
+    },
+    {
+      "fieldName": "price",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "1000.00"
+    },
+    {
+      "fieldName": "priceCurrency",
+      "fieldType": "Currency",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "RON,EUR,USD,GBP"
+    },
+    {
+      "fieldName": "tags",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "address",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": "50",
+      "fieldValidateRulesMinlength": "3"
+    },
+    {
+      "fieldName": "contact",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "minlength", "pattern"],
+      "fieldValidateRulesMinlength": "10",
+      "fieldValidateRulesPattern": "0-9"
+    },
+    {
+      "fieldName": "nbofRooms",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "constrYear",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "useSurface",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "builtSurface",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "compart",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "confort",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "floor",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "nbofKitchens",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required", "min", "max"],
+      "fieldValidateRulesMax": "10",
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "nbofBthrooms",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": "10",
+      "fieldValidateRulesMinlength": "1"
+    },
+    {
+      "fieldName": "unitType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "unitHeight",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "nbofBalconies",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "utilities",
+      "fieldType": "String",
+      "fieldValidateRules": ["minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": "50",
+      "fieldValidateRulesMinlength": "3"
+    },
+    {
+      "fieldName": "features",
+      "fieldType": "String",
+      "fieldValidateRules": ["minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": "50",
+      "fieldValidateRulesMinlength": "3"
+    },
+    {
+      "fieldName": "otherdetails",
+      "fieldType": "String",
+      "fieldValidateRules": ["minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": "50",
+      "fieldValidateRulesMinlength": "3"
+    },
+    {
+      "fieldName": "zoneDetails",
+      "fieldType": "String",
+      "fieldValidateRules": ["minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": "50",
+      "fieldValidateRulesMinlength": "3"
+    },
+    {
+      "fieldName": "availability",
+      "fieldType": "String",
+      "fieldValidateRules": ["minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": "10",
+      "fieldValidateRulesMinlength": "3"
+    }
+  ],
+  "name": "Imob",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "imob",
+      "ownerSide": true,
+      "relationshipName": "imobstouser",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
+}

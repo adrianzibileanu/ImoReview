@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="review">
+      <h2 data-cy="reviewDetailsHeading"><span jhiTranslate="imoReviewApp.review.detail.title">Review</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ review.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.review.title">Title</span></dt>
+        <dd>
+          <span>{{ review.title }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.review.body">Body</span></dt>
+        <dd>
+          <span>{{ review.body }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.review.rating">Rating</span></dt>
+        <dd>
+          <span>{{ review.rating }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.review.isImob">Is Imob</span></dt>
+        <dd>
+          <span>{{ review.isImob }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.review.imobID">Imob ID</span></dt>
+        <dd>
+          <div *ngIf="review.imobID">
+            <a [routerLink]="['/imob', review.imobID.id, 'view']">{{ review.imobID.id }}</a>
+          </div>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.review.userID">User ID</span></dt>
+        <dd>
+          <span>{{ review.userID?.login }}</span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Înapoi</span>
+      </button>
+
+      <button type="button" [routerLink]="['/review', review.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editare</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -10,6 +10,11 @@
         "bankAccount": "ContBancar",
         "label": "Etichetă",
         "operation": "Operație",
+        "imob": "Anunturi",
+        "review": "Recenzii",
+        "sub": "Abonamente",
+        "payment": "Plata",
+        "attachment": "Documente",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

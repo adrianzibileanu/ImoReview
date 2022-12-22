@@ -1,0 +1,124 @@
+<div>
+  <h2 id="page-heading" data-cy="ReviewHeading">
+    <span jhiTranslate="imoReviewApp.review.home.title">Reviews</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="imoReviewApp.review.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-review"
+        [routerLink]="['/review/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="imoReviewApp.review.home.createLabel"> Creeare o nouă entitate Review </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="reviews?.length === 0">
+    <span jhiTranslate="imoReviewApp.review.home.notFound">No Reviews found</span>
+  </div>
+
+  <div class="table-responsive table-entities" id="entities" *ngIf="reviews && reviews.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="title">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.review.title">Title</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="body">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.review.body">Body</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="rating">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.review.rating">Rating</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="isImob">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.review.isImob">Is Imob</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="imobID.id">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.review.imobID">Imob ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="userID.login">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.review.userID">User ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody
+        infinite-scroll
+        (scrolled)="loadPage(page + 1)"
+        [infiniteScrollDisabled]="page - 1 >= links['last']"
+        [infiniteScrollDistance]="0"
+      >
+        <tr *ngFor="let review of reviews; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/review', review.id, 'view']">{{ review.id }}</a>
+          </td>
+          <td>{{ review.title }}</td>
+          <td>{{ review.body }}</td>
+          <td>{{ review.rating }}</td>
+          <td>{{ review.isImob }}</td>
+          <td>
+            <div *ngIf="review.imobID">
+              <a [routerLink]="['/imob', review.imobID.id, 'view']">{{ review.imobID.id }}</a>
+            </div>
+          </td>
+          <td>
+            {{ review.userID?.login }}
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['/review', review.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Vizualizare</span>
+              </button>
+
+              <button type="submit" [routerLink]="['/review', review.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editare</span>
+              </button>
+
+              <button type="submit" (click)="delete(review)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Ștergere</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

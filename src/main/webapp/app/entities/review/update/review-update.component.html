@@ -1,0 +1,134 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-review-heading" data-cy="ReviewCreateUpdateHeading" jhiTranslate="imoReviewApp.review.home.createOrEditLabel">
+        Creeare sau editare Review
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.review.title" for="field_title">Title</label>
+          <input type="text" class="form-control" name="title" id="field_title" data-cy="title" formControlName="title" />
+          <div *ngIf="editForm.get('title')!.invalid && (editForm.get('title')!.dirty || editForm.get('title')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('title')?.errors?.required" jhiTranslate="entity.validation.required">
+              Acest câmp este necesar.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('title')?.errors?.minlength"
+              jhiTranslate="entity.validation.minlength"
+              [translateValues]="{ min: 3 }"
+            >
+              Acest câmp nu poate fi mai scurt de 3 caractere.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('title')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 20 }"
+            >
+              Acest câmp nu poate fi mai lung de 20 caractere.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.review.body" for="field_body">Body</label>
+          <input type="text" class="form-control" name="body" id="field_body" data-cy="body" formControlName="body" />
+          <div *ngIf="editForm.get('body')!.invalid && (editForm.get('body')!.dirty || editForm.get('body')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('body')?.errors?.required" jhiTranslate="entity.validation.required">
+              Acest câmp este necesar.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('body')?.errors?.minlength"
+              jhiTranslate="entity.validation.minlength"
+              [translateValues]="{ min: 3 }"
+            >
+              Acest câmp nu poate fi mai scurt de 3 caractere.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('body')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 800 }"
+            >
+              Acest câmp nu poate fi mai lung de 800 caractere.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.review.rating" for="field_rating">Rating</label>
+          <input type="number" class="form-control" name="rating" id="field_rating" data-cy="rating" formControlName="rating" />
+          <div *ngIf="editForm.get('rating')!.invalid && (editForm.get('rating')!.dirty || editForm.get('rating')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('rating')?.errors?.required" jhiTranslate="entity.validation.required">
+              Acest câmp este necesar.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('rating')?.errors?.number" jhiTranslate="entity.validation.number">
+              Acest câmp trebuie să fie numeric.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.review.isImob" for="field_isImob">Is Imob</label>
+          <input type="checkbox" class="form-check" name="isImob" id="field_isImob" data-cy="isImob" formControlName="isImob" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.review.imobID" for="field_imobID">Imob ID</label>
+          <select
+            class="form-control"
+            id="field_imobID"
+            data-cy="imobID"
+            name="imobID"
+            formControlName="imobID"
+            [compareWith]="compareImob"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="imobOption" *ngFor="let imobOption of imobsSharedCollection">{{ imobOption.id }}</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.review.userID" for="field_userID">User ID</label>
+          <select
+            class="form-control"
+            id="field_userID"
+            data-cy="userID"
+            name="userID"
+            formControlName="userID"
+            [compareWith]="compareUser"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="userOption" *ngFor="let userOption of usersSharedCollection">{{ userOption.login }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Anulare</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Salvare</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

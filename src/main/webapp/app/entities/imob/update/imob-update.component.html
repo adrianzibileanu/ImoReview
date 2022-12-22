@@ -1,0 +1,660 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-imob-heading" data-cy="ImobCreateUpdateHeading" jhiTranslate="imoReviewApp.imob.home.createOrEditLabel">
+        Creeare sau editare Imob
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.title" for="field_title">Title</label>
+          <input type="text" class="form-control" name="title" id="field_title" data-cy="title" formControlName="title" />
+          <div *ngIf="editForm.get('title')!.invalid && (editForm.get('title')!.dirty || editForm.get('title')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('title')?.errors?.required" jhiTranslate="entity.validation.required">
+              Acest câmp este necesar.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('title')?.errors?.minlength"
+              jhiTranslate="entity.validation.minlength"
+              [translateValues]="{ min: 3 }"
+            >
+              Acest câmp nu poate fi mai scurt de 3 caractere.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('title')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 30 }"
+            >
+              Acest câmp nu poate fi mai lung de 30 caractere.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.description" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+          <div *ngIf="editForm.get('description')!.invalid && (editForm.get('description')!.dirty || editForm.get('description')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('description')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('description')?.errors?.minlength"
+              jhiTranslate="entity.validation.minlength"
+              [translateValues]="{ min: 3 }"
+            >
+              Acest câmp nu poate fi mai scurt de 3 caractere.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('description')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 1000 }"
+            >
+              Acest câmp nu poate fi mai lung de 1000 caractere.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.type" for="field_type">Type</label>
+          <select class="form-control" name="type" formControlName="type" id="field_type" data-cy="type">
+            <option [ngValue]="null">{{ 'imoReviewApp.ImobType.null' | translate }}</option>
+            <option *ngFor="let imobType of imobTypeValues" [value]="imobType">
+              {{ 'imoReviewApp.ImobType.' + imobType | translate }}
+            </option>
+          </select>
+          <div *ngIf="editForm.get('type')!.invalid && (editForm.get('type')!.dirty || editForm.get('type')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('type')?.errors?.required" jhiTranslate="entity.validation.required">
+              Acest câmp este necesar.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.categ" for="field_categ">Categ</label>
+          <select class="form-control" name="categ" formControlName="categ" id="field_categ" data-cy="categ">
+            <option [ngValue]="null">{{ 'imoReviewApp.ImobCateg.null' | translate }}</option>
+            <option *ngFor="let imobCateg of imobCategValues" [value]="imobCateg">
+              {{ 'imoReviewApp.ImobCateg.' + imobCateg | translate }}
+            </option>
+          </select>
+          <div *ngIf="editForm.get('categ')!.invalid && (editForm.get('categ')!.dirty || editForm.get('categ')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('categ')?.errors?.required" jhiTranslate="entity.validation.required">
+              Acest câmp este necesar.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.service" for="field_service">Service</label>
+          <select class="form-control" name="service" formControlName="service" id="field_service" data-cy="service">
+            <option [ngValue]="null">{{ 'imoReviewApp.ImobServ.null' | translate }}</option>
+            <option *ngFor="let imobServ of imobServValues" [value]="imobServ">
+              {{ 'imoReviewApp.ImobServ.' + imobServ | translate }}
+            </option>
+          </select>
+          <div *ngIf="editForm.get('service')!.invalid && (editForm.get('service')!.dirty || editForm.get('service')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('service')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.price" for="field_price">Price</label>
+          <input type="number" class="form-control" name="price" id="field_price" data-cy="price" formControlName="price" />
+          <div *ngIf="editForm.get('price')!.invalid && (editForm.get('price')!.dirty || editForm.get('price')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('price')?.errors?.required" jhiTranslate="entity.validation.required">
+              Acest câmp este necesar.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('price')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 1000.0 }"
+            >
+              Acest câmp trebuie să aibă o valoare mai mare decât 1000.00.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('price')?.errors?.number" jhiTranslate="entity.validation.number">
+              Acest câmp trebuie să fie numeric.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.priceCurrency" for="field_priceCurrency">Price Currency</label>
+          <select
+            class="form-control"
+            name="priceCurrency"
+            formControlName="priceCurrency"
+            id="field_priceCurrency"
+            data-cy="priceCurrency"
+          >
+            <option [ngValue]="null">{{ 'imoReviewApp.Currency.null' | translate }}</option>
+            <option *ngFor="let currency of currencyValues" [value]="currency">
+              {{ 'imoReviewApp.Currency.' + currency | translate }}
+            </option>
+          </select>
+          <div
+            *ngIf="
+              editForm.get('priceCurrency')!.invalid && (editForm.get('priceCurrency')!.dirty || editForm.get('priceCurrency')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('priceCurrency')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.tags" for="field_tags">Tags</label>
+          <input type="text" class="form-control" name="tags" id="field_tags" data-cy="tags" formControlName="tags" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.address" for="field_address">Address</label>
+          <input type="text" class="form-control" name="address" id="field_address" data-cy="address" formControlName="address" />
+          <div *ngIf="editForm.get('address')!.invalid && (editForm.get('address')!.dirty || editForm.get('address')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('address')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('address')?.errors?.minlength"
+              jhiTranslate="entity.validation.minlength"
+              [translateValues]="{ min: 3 }"
+            >
+              Acest câmp nu poate fi mai scurt de 3 caractere.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('address')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 50 }"
+            >
+              Acest câmp nu poate fi mai lung de 50 caractere.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.contact" for="field_contact">Contact</label>
+          <input type="text" class="form-control" name="contact" id="field_contact" data-cy="contact" formControlName="contact" />
+          <div *ngIf="editForm.get('contact')!.invalid && (editForm.get('contact')!.dirty || editForm.get('contact')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('contact')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('contact')?.errors?.minlength"
+              jhiTranslate="entity.validation.minlength"
+              [translateValues]="{ min: 10 }"
+            >
+              Acest câmp nu poate fi mai scurt de 10 caractere.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('contact')?.errors?.pattern"
+              jhiTranslate="entity.validation.pattern"
+              [translateValues]="{ pattern: 'Contact' }"
+            >
+              Acest câmp trebuie să corespundă șablonului Contact.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.nbofRooms" for="field_nbofRooms">Nbof Rooms</label>
+          <input type="number" class="form-control" name="nbofRooms" id="field_nbofRooms" data-cy="nbofRooms" formControlName="nbofRooms" />
+          <div *ngIf="editForm.get('nbofRooms')!.invalid && (editForm.get('nbofRooms')!.dirty || editForm.get('nbofRooms')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('nbofRooms')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('nbofRooms')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 1 }"
+            >
+              Acest câmp trebuie să aibă o valoare mai mare decât 1.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('nbofRooms')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              Acest câmp trebuie să fie numeric.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.constrYear" for="field_constrYear">Constr Year</label>
+          <div class="input-group">
+            <input
+              id="field_constrYear"
+              data-cy="constrYear"
+              type="text"
+              class="form-control"
+              name="constrYear"
+              ngbDatepicker
+              #constrYearDp="ngbDatepicker"
+              formControlName="constrYear"
+            />
+            <button type="button" class="btn btn-secondary" (click)="constrYearDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+          <div *ngIf="editForm.get('constrYear')!.invalid && (editForm.get('constrYear')!.dirty || editForm.get('constrYear')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('constrYear')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.useSurface" for="field_useSurface">Use Surface</label>
+          <input
+            type="number"
+            class="form-control"
+            name="useSurface"
+            id="field_useSurface"
+            data-cy="useSurface"
+            formControlName="useSurface"
+          />
+          <div *ngIf="editForm.get('useSurface')!.invalid && (editForm.get('useSurface')!.dirty || editForm.get('useSurface')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('useSurface')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('useSurface')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              Acest câmp trebuie să fie numeric.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.builtSurface" for="field_builtSurface">Built Surface</label>
+          <input
+            type="text"
+            class="form-control"
+            name="builtSurface"
+            id="field_builtSurface"
+            data-cy="builtSurface"
+            formControlName="builtSurface"
+          />
+          <div
+            *ngIf="editForm.get('builtSurface')!.invalid && (editForm.get('builtSurface')!.dirty || editForm.get('builtSurface')!.touched)"
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('builtSurface')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.compart" for="field_compart">Compart</label>
+          <input type="text" class="form-control" name="compart" id="field_compart" data-cy="compart" formControlName="compart" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.confort" for="field_confort">Confort</label>
+          <input type="text" class="form-control" name="confort" id="field_confort" data-cy="confort" formControlName="confort" />
+          <div *ngIf="editForm.get('confort')!.invalid && (editForm.get('confort')!.dirty || editForm.get('confort')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('confort')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.floor" for="field_floor">Floor</label>
+          <input type="number" class="form-control" name="floor" id="field_floor" data-cy="floor" formControlName="floor" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.nbofKitchens" for="field_nbofKitchens">Nbof Kitchens</label>
+          <input
+            type="number"
+            class="form-control"
+            name="nbofKitchens"
+            id="field_nbofKitchens"
+            data-cy="nbofKitchens"
+            formControlName="nbofKitchens"
+          />
+          <div
+            *ngIf="editForm.get('nbofKitchens')!.invalid && (editForm.get('nbofKitchens')!.dirty || editForm.get('nbofKitchens')!.touched)"
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('nbofKitchens')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('nbofKitchens')?.errors?.min"
+              jhiTranslate="entity.validation.min"
+              [translateValues]="{ min: 1 }"
+            >
+              Acest câmp trebuie să aibă o valoare mai mare decât 1.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('nbofKitchens')?.errors?.max"
+              jhiTranslate="entity.validation.max"
+              [translateValues]="{ max: 10 }"
+            >
+              Acest câmp trebuie să aibă o valoare mai mică decât 10.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('nbofKitchens')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              Acest câmp trebuie să fie numeric.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.nbofBthrooms" for="field_nbofBthrooms">Nbof Bthrooms</label>
+          <input
+            type="text"
+            class="form-control"
+            name="nbofBthrooms"
+            id="field_nbofBthrooms"
+            data-cy="nbofBthrooms"
+            formControlName="nbofBthrooms"
+          />
+          <div
+            *ngIf="editForm.get('nbofBthrooms')!.invalid && (editForm.get('nbofBthrooms')!.dirty || editForm.get('nbofBthrooms')!.touched)"
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('nbofBthrooms')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('nbofBthrooms')?.errors?.minlength"
+              jhiTranslate="entity.validation.minlength"
+              [translateValues]="{ min: 1 }"
+            >
+              Acest câmp nu poate fi mai scurt de 1 caractere.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('nbofBthrooms')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 10 }"
+            >
+              Acest câmp nu poate fi mai lung de 10 caractere.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.unitType" for="field_unitType">Unit Type</label>
+          <input type="text" class="form-control" name="unitType" id="field_unitType" data-cy="unitType" formControlName="unitType" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.unitHeight" for="field_unitHeight">Unit Height</label>
+          <input
+            type="text"
+            class="form-control"
+            name="unitHeight"
+            id="field_unitHeight"
+            data-cy="unitHeight"
+            formControlName="unitHeight"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.nbofBalconies" for="field_nbofBalconies">Nbof Balconies</label>
+          <input
+            type="text"
+            class="form-control"
+            name="nbofBalconies"
+            id="field_nbofBalconies"
+            data-cy="nbofBalconies"
+            formControlName="nbofBalconies"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.utilities" for="field_utilities">Utilities</label>
+          <input type="text" class="form-control" name="utilities" id="field_utilities" data-cy="utilities" formControlName="utilities" />
+          <div *ngIf="editForm.get('utilities')!.invalid && (editForm.get('utilities')!.dirty || editForm.get('utilities')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('utilities')?.errors?.minlength"
+              jhiTranslate="entity.validation.minlength"
+              [translateValues]="{ min: 3 }"
+            >
+              Acest câmp nu poate fi mai scurt de 3 caractere.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('utilities')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 50 }"
+            >
+              Acest câmp nu poate fi mai lung de 50 caractere.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.features" for="field_features">Features</label>
+          <input type="text" class="form-control" name="features" id="field_features" data-cy="features" formControlName="features" />
+          <div *ngIf="editForm.get('features')!.invalid && (editForm.get('features')!.dirty || editForm.get('features')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('features')?.errors?.minlength"
+              jhiTranslate="entity.validation.minlength"
+              [translateValues]="{ min: 3 }"
+            >
+              Acest câmp nu poate fi mai scurt de 3 caractere.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('features')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 50 }"
+            >
+              Acest câmp nu poate fi mai lung de 50 caractere.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.otherdetails" for="field_otherdetails">Otherdetails</label>
+          <input
+            type="text"
+            class="form-control"
+            name="otherdetails"
+            id="field_otherdetails"
+            data-cy="otherdetails"
+            formControlName="otherdetails"
+          />
+          <div
+            *ngIf="editForm.get('otherdetails')!.invalid && (editForm.get('otherdetails')!.dirty || editForm.get('otherdetails')!.touched)"
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('otherdetails')?.errors?.minlength"
+              jhiTranslate="entity.validation.minlength"
+              [translateValues]="{ min: 3 }"
+            >
+              Acest câmp nu poate fi mai scurt de 3 caractere.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('otherdetails')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 50 }"
+            >
+              Acest câmp nu poate fi mai lung de 50 caractere.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.zoneDetails" for="field_zoneDetails">Zone Details</label>
+          <input
+            type="text"
+            class="form-control"
+            name="zoneDetails"
+            id="field_zoneDetails"
+            data-cy="zoneDetails"
+            formControlName="zoneDetails"
+          />
+          <div *ngIf="editForm.get('zoneDetails')!.invalid && (editForm.get('zoneDetails')!.dirty || editForm.get('zoneDetails')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('zoneDetails')?.errors?.minlength"
+              jhiTranslate="entity.validation.minlength"
+              [translateValues]="{ min: 3 }"
+            >
+              Acest câmp nu poate fi mai scurt de 3 caractere.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('zoneDetails')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 50 }"
+            >
+              Acest câmp nu poate fi mai lung de 50 caractere.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.availability" for="field_availability">Availability</label>
+          <input
+            type="text"
+            class="form-control"
+            name="availability"
+            id="field_availability"
+            data-cy="availability"
+            formControlName="availability"
+          />
+          <div
+            *ngIf="editForm.get('availability')!.invalid && (editForm.get('availability')!.dirty || editForm.get('availability')!.touched)"
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('availability')?.errors?.minlength"
+              jhiTranslate="entity.validation.minlength"
+              [translateValues]="{ min: 3 }"
+            >
+              Acest câmp nu poate fi mai scurt de 3 caractere.
+            </small>
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('availability')?.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: 10 }"
+            >
+              Acest câmp nu poate fi mai lung de 10 caractere.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.imob.imobstouser" for="field_imobstouser">Imobstouser</label>
+          <select
+            class="form-control"
+            id="field_imobstouser"
+            data-cy="imobstouser"
+            name="imobstouser"
+            formControlName="imobstouser"
+            [compareWith]="compareUser"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="userOption" *ngFor="let userOption of usersSharedCollection">{{ userOption.login }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Anulare</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Salvare</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

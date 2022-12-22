@@ -1,0 +1,94 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-payment-heading" data-cy="PaymentCreateUpdateHeading" jhiTranslate="imoReviewApp.payment.home.createOrEditLabel">
+        Creeare sau editare Payment
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.payment.price" for="field_price">Price</label>
+          <input type="number" class="form-control" name="price" id="field_price" data-cy="price" formControlName="price" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.payment.amount" for="field_amount">Amount</label>
+          <input type="number" class="form-control" name="amount" id="field_amount" data-cy="amount" formControlName="amount" />
+          <div *ngIf="editForm.get('amount')!.invalid && (editForm.get('amount')!.dirty || editForm.get('amount')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('amount')?.errors?.required" jhiTranslate="entity.validation.required">
+              Acest câmp este necesar.
+            </small>
+            <small class="form-text text-danger" [hidden]="!editForm.get('amount')?.errors?.number" jhiTranslate="entity.validation.number">
+              Acest câmp trebuie să fie numeric.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.payment.currency" for="field_currency">Currency</label>
+          <select class="form-control" name="currency" formControlName="currency" id="field_currency" data-cy="currency">
+            <option [ngValue]="null">{{ 'imoReviewApp.Currency.null' | translate }}</option>
+            <option *ngFor="let currency of currencyValues" [value]="currency">
+              {{ 'imoReviewApp.Currency.' + currency | translate }}
+            </option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.payment.terms" for="field_terms">Terms</label>
+          <input type="checkbox" class="form-check" name="terms" id="field_terms" data-cy="terms" formControlName="terms" />
+          <div *ngIf="editForm.get('terms')!.invalid && (editForm.get('terms')!.dirty || editForm.get('terms')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('terms')?.errors?.required" jhiTranslate="entity.validation.required">
+              Acest câmp este necesar.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.payment.success" for="field_success">Success</label>
+          <input type="checkbox" class="form-check" name="success" id="field_success" data-cy="success" formControlName="success" />
+          <div *ngIf="editForm.get('success')!.invalid && (editForm.get('success')!.dirty || editForm.get('success')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('success')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.payment.subID" for="field_subID">Sub ID</label>
+          <select class="form-control" id="field_subID" data-cy="subID" name="subID" formControlName="subID" [compareWith]="compareSub">
+            <option [ngValue]="null"></option>
+            <option [ngValue]="subOption" *ngFor="let subOption of subsSharedCollection">{{ subOption.id }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Anulare</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Salvare</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

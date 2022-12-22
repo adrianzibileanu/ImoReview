@@ -1,0 +1,93 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-sub-heading" data-cy="SubCreateUpdateHeading" jhiTranslate="imoReviewApp.sub.home.createOrEditLabel">
+        Creeare sau editare Sub
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.sub.subscribed" for="field_subscribed">Subscribed</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="subscribed"
+            id="field_subscribed"
+            data-cy="subscribed"
+            formControlName="subscribed"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.sub.active" for="field_active">Active</label>
+          <input type="checkbox" class="form-check" name="active" id="field_active" data-cy="active" formControlName="active" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.sub.expirationDate" for="field_expirationDate">Expiration Date</label>
+          <div class="input-group">
+            <input
+              id="field_expirationDate"
+              data-cy="expirationDate"
+              type="text"
+              class="form-control"
+              name="expirationDate"
+              ngbDatepicker
+              #expirationDateDp="ngbDatepicker"
+              formControlName="expirationDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="expirationDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.sub.type" for="field_type">Type</label>
+          <select class="form-control" name="type" formControlName="type" id="field_type" data-cy="type">
+            <option [ngValue]="null">{{ 'imoReviewApp.SubType.null' | translate }}</option>
+            <option *ngFor="let subType of subTypeValues" [value]="subType">{{ 'imoReviewApp.SubType.' + subType | translate }}</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.sub.userID" for="field_userID">User ID</label>
+          <select
+            class="form-control"
+            id="field_userID"
+            data-cy="userID"
+            name="userID"
+            formControlName="userID"
+            [compareWith]="compareUser"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="userOption" *ngFor="let userOption of usersSharedCollection">{{ userOption.login }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Anulare</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Salvare</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

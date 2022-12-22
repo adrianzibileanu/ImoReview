@@ -1,0 +1,9 @@
+{
+  "imoReviewApp": {
+    "ImobServ": {
+      "null": "",
+      "RENT": "Inchiriere",
+      "BUY": "Vanzare"
+    }
+  }
+}

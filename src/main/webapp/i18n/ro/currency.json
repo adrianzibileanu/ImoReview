@@ -1,0 +1,11 @@
+{
+  "imoReviewApp": {
+    "Currency": {
+      "null": "",
+      "RON": "RON",
+      "EUR": "EUR",
+      "GBP": "GBP",
+      "USD": "USD"
+    }
+  }
+}

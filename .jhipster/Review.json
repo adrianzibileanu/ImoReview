@@ -1,0 +1,48 @@
+{
+  "changelogDate": "20221221210300",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": "20",
+      "fieldValidateRulesMinlength": "3"
+    },
+    {
+      "fieldName": "body",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "minlength", "maxlength"],
+      "fieldValidateRulesMaxlength": "800",
+      "fieldValidateRulesMinlength": "3"
+    },
+    {
+      "fieldName": "rating",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "isImob",
+      "fieldType": "Boolean"
+    }
+  ],
+  "name": "Review",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "imob",
+      "relationshipName": "imobID",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "review",
+      "ownerSide": true,
+      "relationshipName": "userID",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
+}

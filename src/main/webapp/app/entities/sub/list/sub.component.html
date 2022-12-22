@@ -1,0 +1,126 @@
+<div>
+  <h2 id="page-heading" data-cy="SubHeading">
+    <span jhiTranslate="imoReviewApp.sub.home.title">Subs</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="imoReviewApp.sub.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-sub"
+        [routerLink]="['/sub/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="imoReviewApp.sub.home.createLabel"> Creeare o nouă entitate Sub </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="subs?.length === 0">
+    <span jhiTranslate="imoReviewApp.sub.home.notFound">No Subs found</span>
+  </div>
+
+  <div class="table-responsive table-entities" id="entities" *ngIf="subs && subs.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="subscribed">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.sub.subscribed">Subscribed</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="active">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.sub.active">Active</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="expirationDate">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.sub.expirationDate">Expiration Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="type">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.sub.type">Type</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="userID.login">
+            <div class="d-flex">
+              <span jhiTranslate="imoReviewApp.sub.userID">User ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sub of subs; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/sub', sub.id, 'view']">{{ sub.id }}</a>
+          </td>
+          <td>{{ sub.subscribed }}</td>
+          <td>{{ sub.active }}</td>
+          <td>{{ sub.expirationDate | formatMediumDate }}</td>
+          <td jhiTranslate="{{ 'imoReviewApp.SubType.' + sub.type }}">{{ sub.type }}</td>
+          <td>
+            {{ sub.userID?.login }}
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['/sub', sub.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Vizualizare</span>
+              </button>
+
+              <button type="submit" [routerLink]="['/sub', sub.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editare</span>
+              </button>
+
+              <button type="submit" (click)="delete(sub)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Ștergere</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="subs && subs.length > 0">
+    <div class="d-flex justify-content-center">
+      <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+    </div>
+
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [collectionSize]="totalItems"
+        [page]="page"
+        [pageSize]="itemsPerPage"
+        [maxSize]="5"
+        [rotate]="true"
+        [boundaryLinks]="true"
+        (pageChange)="navigateToPage($event)"
+      ></ngb-pagination>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+{
+  "changelogDate": "20221221220020",
+  "fields": [
+    {
+      "fieldName": "price",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "amount",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "currency",
+      "fieldType": "Currency",
+      "fieldValues": "RON,EUR,GBP,USD"
+    },
+    {
+      "fieldName": "terms",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "success",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "name": "Payment",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "sub",
+      "relationshipName": "subID",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
+}

@@ -1,0 +1,197 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-attachment-heading" data-cy="AttachmentCreateUpdateHeading" jhiTranslate="imoReviewApp.attachment.home.createOrEditLabel">
+        Creeare sau editare Attachment
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.attachment.fileName" for="field_fileName">File Name</label>
+          <input type="text" class="form-control" name="fileName" id="field_fileName" data-cy="fileName" formControlName="fileName" />
+          <div *ngIf="editForm.get('fileName')!.invalid && (editForm.get('fileName')!.dirty || editForm.get('fileName')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('fileName')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.attachment.originalFileName" for="field_originalFileName"
+            >Original File Name</label
+          >
+          <input
+            type="file"
+            class="form-control"
+            name="originalFileName"
+            id="field_originalFileName"
+            data-cy="originalFileName"
+            formControlName="originalFileName"
+          />
+          <div
+            *ngIf="
+              editForm.get('originalFileName')!.invalid &&
+              (editForm.get('originalFileName')!.dirty || editForm.get('originalFileName')!.touched)
+            "
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('originalFileName')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.attachment.extension" for="field_extension">Extension</label>
+          <input type="text" class="form-control" name="extension" id="field_extension" data-cy="extension" formControlName="extension" />
+          <div *ngIf="editForm.get('extension')!.invalid && (editForm.get('extension')!.dirty || editForm.get('extension')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('extension')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.attachment.sizeInBytes" for="field_sizeInBytes">Size In Bytes</label>
+          <input
+            type="number"
+            class="form-control"
+            name="sizeInBytes"
+            id="field_sizeInBytes"
+            data-cy="sizeInBytes"
+            formControlName="sizeInBytes"
+          />
+          <div *ngIf="editForm.get('sizeInBytes')!.invalid && (editForm.get('sizeInBytes')!.dirty || editForm.get('sizeInBytes')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('sizeInBytes')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('sizeInBytes')?.errors?.number"
+              jhiTranslate="entity.validation.number"
+            >
+              Acest câmp trebuie să fie numeric.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.attachment.uploadedDate" for="field_uploadedDate">Uploaded Date</label>
+          <div class="d-flex">
+            <input
+              id="field_uploadedDate"
+              data-cy="uploadedDate"
+              type="datetime-local"
+              class="form-control"
+              name="uploadedDate"
+              formControlName="uploadedDate"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          <div
+            *ngIf="editForm.get('uploadedDate')!.invalid && (editForm.get('uploadedDate')!.dirty || editForm.get('uploadedDate')!.touched)"
+          >
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('uploadedDate')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+            <small
+              class="form-text text-danger"
+              [hidden]="!editForm.get('uploadedDate')?.errors?.datetimelocal"
+              jhiTranslate="entity.validation.datetimelocal"
+            >
+              Acest câmp trebuie să conțină data și ora.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.attachment.sha256" for="field_sha256">Sha 256</label>
+          <input type="text" class="form-control" name="sha256" id="field_sha256" data-cy="sha256" formControlName="sha256" />
+          <div *ngIf="editForm.get('sha256')!.invalid && (editForm.get('sha256')!.dirty || editForm.get('sha256')!.touched)">
+            <small class="form-text text-danger" *ngIf="editForm.get('sha256')?.errors?.required" jhiTranslate="entity.validation.required">
+              Acest câmp este necesar.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" jhiTranslate="imoReviewApp.attachment.contentType" for="field_contentType">Content Type</label>
+          <input
+            type="text"
+            class="form-control"
+            name="contentType"
+            id="field_contentType"
+            data-cy="contentType"
+            formControlName="contentType"
+          />
+          <div *ngIf="editForm.get('contentType')!.invalid && (editForm.get('contentType')!.dirty || editForm.get('contentType')!.touched)">
+            <small
+              class="form-text text-danger"
+              *ngIf="editForm.get('contentType')?.errors?.required"
+              jhiTranslate="entity.validation.required"
+            >
+              Acest câmp este necesar.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label jhiTranslate="imoReviewApp.attachment.manytomany" for="field_manytomanies">Manytomany</label>
+          <select
+            class="form-control"
+            id="field_manytomanies"
+            data-cy="manytomany"
+            multiple
+            name="manytomanies"
+            formControlName="manytomanies"
+            [compareWith]="compareUser"
+          >
+            <option [ngValue]="userOption" *ngFor="let userOption of usersSharedCollection">{{ userOption.login }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Anulare</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Salvare</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

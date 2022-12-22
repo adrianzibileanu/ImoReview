@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="payment">
+      <h2 data-cy="paymentDetailsHeading"><span jhiTranslate="imoReviewApp.payment.detail.title">Payment</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ payment.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.payment.price">Price</span></dt>
+        <dd>
+          <span>{{ payment.price }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.payment.amount">Amount</span></dt>
+        <dd>
+          <span>{{ payment.amount }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.payment.currency">Currency</span></dt>
+        <dd>
+          <span jhiTranslate="{{ 'imoReviewApp.Currency.' + payment.currency }}">{{ payment.currency }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.payment.terms">Terms</span></dt>
+        <dd>
+          <span>{{ payment.terms }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.payment.success">Success</span></dt>
+        <dd>
+          <span>{{ payment.success }}</span>
+        </dd>
+        <dt><span jhiTranslate="imoReviewApp.payment.subID">Sub ID</span></dt>
+        <dd>
+          <div *ngIf="payment.subID">
+            <a [routerLink]="['/sub', payment.subID.id, 'view']">{{ payment.subID.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Înapoi</span>
+      </button>
+
+      <button type="button" [routerLink]="['/payment', payment.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editare</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+{
+  "imoReviewApp": {
+    "payment": {
+      "home": {
+        "title": "Plăți",
+        "refreshListLabel": "Actualizare lista",
+        "createLabel": "Efectuare nouă plată",
+        "createOrEditLabel": "Efectuare sau editare plată",
+        "notFound": "No Payments found"
+      },
+      "created": "A fost efectuată o nouă plată cu numărul {{ param }}",
+      "updated": "Plata cu numărul {{ param }} a fost actualizată",
+      "deleted": "Plata cu numărul {{ param }} a fost ștearsă",
+      "delete": {
+        "question": "Sunteți sigur că doriți să ștergeți plata cu numărul {{ id }}?"
+      },
+      "detail": {
+        "title": "Plată"
+      },
+      "id": "ID",
+      "price": "Preț",
+      "amount": "Sumă",
+      "currency": "Valută",
+      "terms": "Termeni și condiții",
+      "success": "Succes",
+      "subID": "Numărul abonamentului"
+    }
+  }
+}

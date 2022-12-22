@@ -1,0 +1,29 @@
+{
+  "imoReviewApp": {
+    "review": {
+      "home": {
+        "title": "Recenzii",
+        "refreshListLabel": "Actualizare listă",
+        "createLabel": "Creeare o nouă recenzie",
+        "createOrEditLabel": "Creeare sau editare recenzie",
+        "notFound": "No Reviews found"
+      },
+      "created": "A fost creată o nouă entitate Review cu identificatorul {{ param }}",
+      "updated": "Recenzia cu numărul {{ param }} a fost actualizată",
+      "deleted": "Recenzia cu numărul {{ param }} a fost ștearsă",
+      "delete": {
+        "question": "Sunteți sigur că doriți să ștergeți recenzia cu numărul {{ id }}?"
+      },
+      "detail": {
+        "title": "Recenzie"
+      },
+      "id": "ID",
+      "title": "Titlu",
+      "body": "Comentariu",
+      "rating": "Rating",
+      "isImob": "Imobil?",
+      "imobID": "ID Imobil",
+      "userID": "ID User"
+    }
+  }
+}
