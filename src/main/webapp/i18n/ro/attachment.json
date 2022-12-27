@@ -18,14 +18,10 @@
         "title": "Attachment"
       },
       "id": "ID",
-      "fileName": "File Name",
-      "originalFileName": "Original File Name",
-      "extension": "Extension",
-      "sizeInBytes": "Size In Bytes",
-      "uploadedDate": "Uploaded Date",
-      "sha256": "Sha 256",
-      "contentType": "Content Type",
-      "manytomany": "Manytomany"
+      "name": "Name",
+      "cvFile": "Cv File",
+      "cvFileContentType": "Cv File Content Type",
+      "manytoone": "Manytoone"
     }
   }
 }

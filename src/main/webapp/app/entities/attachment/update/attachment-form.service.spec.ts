@@ -20,14 +20,10 @@ describe('Attachment Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            fileName: expect.any(Object),
-            originalFileName: expect.any(Object),
-            extension: expect.any(Object),
-            sizeInBytes: expect.any(Object),
-            uploadedDate: expect.any(Object),
-            sha256: expect.any(Object),
-            contentType: expect.any(Object),
-            manytomanies: expect.any(Object),
+            name: expect.any(Object),
+            cvFile: expect.any(Object),
+            cvFileContentType: expect.any(Object),
+            manytoone: expect.any(Object),
           })
         );
       });
@@ -38,14 +34,10 @@ describe('Attachment Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            fileName: expect.any(Object),
-            originalFileName: expect.any(Object),
-            extension: expect.any(Object),
-            sizeInBytes: expect.any(Object),
-            uploadedDate: expect.any(Object),
-            sha256: expect.any(Object),
-            contentType: expect.any(Object),
-            manytomanies: expect.any(Object),
+            name: expect.any(Object),
+            cvFile: expect.any(Object),
+            cvFileContentType: expect.any(Object),
+            manytoone: expect.any(Object),
           })
         );
       });

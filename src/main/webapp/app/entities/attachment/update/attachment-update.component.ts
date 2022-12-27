@@ -7,6 +7,9 @@ import { finalize, map } from 'rxjs/operators';
 import { AttachmentFormService, AttachmentFormGroup } from './attachment-form.service';
 import { IAttachment } from '../attachment.model';
 import { AttachmentService } from '../service/attachment.service';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
 import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/user.service';
 
@@ -23,6 +26,8 @@ export class AttachmentUpdateComponent implements OnInit {
   editForm: AttachmentFormGroup = this.attachmentFormService.createAttachmentFormGroup();
 
   constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
     protected attachmentService: AttachmentService,
     protected attachmentFormService: AttachmentFormService,
     protected userService: UserService,
@@ -39,6 +44,21 @@ export class AttachmentUpdateComponent implements OnInit {
       }
 
       this.loadRelationshipsOptions();
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(new EventWithContent<AlertError>('imoReviewApp.error', { ...err, key: 'error.file.' + err.key })),
     });
   }
 
@@ -79,17 +99,14 @@ export class AttachmentUpdateComponent implements OnInit {
     this.attachment = attachment;
     this.attachmentFormService.resetForm(this.editForm, attachment);
 
-    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing<IUser>(
-      this.usersSharedCollection,
-      ...(attachment.manytomanies ?? [])
-    );
+    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing<IUser>(this.usersSharedCollection, attachment.manytoone);
   }
 
   protected loadRelationshipsOptions(): void {
     this.userService
       .query()
       .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
-      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing<IUser>(users, ...(this.attachment?.manytomanies ?? []))))
+      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing<IUser>(users, this.attachment?.manytoone)))
       .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
   }
 }

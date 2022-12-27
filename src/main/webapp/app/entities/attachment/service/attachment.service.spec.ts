@@ -4,11 +4,10 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { IAttachment } from '../attachment.model';
 import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../attachment.test-samples';
 
-import { AttachmentService, RestAttachment } from './attachment.service';
+import { AttachmentService } from './attachment.service';
 
-const requireRestSample: RestAttachment = {
+const requireRestSample: IAttachment = {
   ...sampleWithRequiredData,
-  uploadedDate: sampleWithRequiredData.uploadedDate?.toJSON(),
 };
 
 describe('Attachment Service', () => {

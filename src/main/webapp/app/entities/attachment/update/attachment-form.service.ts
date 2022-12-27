@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import dayjs from 'dayjs/esm';
-import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { IAttachment, NewAttachment } from '../attachment.model';
 
 /**
@@ -16,29 +14,15 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type AttachmentFormGroupInput = IAttachment | PartialWithRequiredKeyOf<NewAttachment>;
 
-/**
- * Type that converts some properties for forms.
- */
-type FormValueOf<T extends IAttachment | NewAttachment> = Omit<T, 'uploadedDate'> & {
-  uploadedDate?: string | null;
-};
-
-type AttachmentFormRawValue = FormValueOf<IAttachment>;
-
-type NewAttachmentFormRawValue = FormValueOf<NewAttachment>;
-
-type AttachmentFormDefaults = Pick<NewAttachment, 'id' | 'uploadedDate' | 'manytomanies'>;
+type AttachmentFormDefaults = Pick<NewAttachment, 'id'>;
 
 type AttachmentFormGroupContent = {
-  id: FormControl<AttachmentFormRawValue['id'] | NewAttachment['id']>;
-  fileName: FormControl<AttachmentFormRawValue['fileName']>;
-  originalFileName: FormControl<AttachmentFormRawValue['originalFileName']>;
-  extension: FormControl<AttachmentFormRawValue['extension']>;
-  sizeInBytes: FormControl<AttachmentFormRawValue['sizeInBytes']>;
-  uploadedDate: FormControl<AttachmentFormRawValue['uploadedDate']>;
-  sha256: FormControl<AttachmentFormRawValue['sha256']>;
-  contentType: FormControl<AttachmentFormRawValue['contentType']>;
-  manytomanies: FormControl<AttachmentFormRawValue['manytomanies']>;
+  id: FormControl<IAttachment['id'] | NewAttachment['id']>;
+  name: FormControl<IAttachment['name']>;
+  cvFile: FormControl<IAttachment['cvFile']>;
+  // cvFileContentType: FormControl<IAttachment['cvFileContentType']>;
+  cvFileContentType: FormControl<IAttachment['cvFileContentType']>;
+  manytoone: FormControl<IAttachment['manytoone']>;
 };
 
 export type AttachmentFormGroup = FormGroup<AttachmentFormGroupContent>;
@@ -46,10 +30,10 @@ export type AttachmentFormGroup = FormGroup<AttachmentFormGroupContent>;
 @Injectable({ providedIn: 'root' })
 export class AttachmentFormService {
   createAttachmentFormGroup(attachment: AttachmentFormGroupInput = { id: null }): AttachmentFormGroup {
-    const attachmentRawValue = this.convertAttachmentToAttachmentRawValue({
+    const attachmentRawValue = {
       ...this.getFormDefaults(),
       ...attachment,
-    });
+    };
     return new FormGroup<AttachmentFormGroupContent>({
       id: new FormControl(
         { value: attachmentRawValue.id, disabled: true },
@@ -58,37 +42,26 @@ export class AttachmentFormService {
           validators: [Validators.required],
         }
       ),
-      fileName: new FormControl(attachmentRawValue.fileName, {
+      name: new FormControl(attachmentRawValue.name, {
         validators: [Validators.required],
       }),
-      originalFileName: new FormControl(attachmentRawValue.originalFileName, {
+      cvFile: new FormControl(attachmentRawValue.cvFile, {
         validators: [Validators.required],
       }),
-      extension: new FormControl(attachmentRawValue.extension, {
+      //  cvFileContentType: new FormControl(attachmentRawValue.cvFileContentType),
+      cvFileContentType: new FormControl(attachmentRawValue.cvFileContentType, {
         validators: [Validators.required],
       }),
-      sizeInBytes: new FormControl(attachmentRawValue.sizeInBytes, {
-        validators: [Validators.required],
-      }),
-      uploadedDate: new FormControl(attachmentRawValue.uploadedDate, {
-        validators: [Validators.required],
-      }),
-      sha256: new FormControl(attachmentRawValue.sha256, {
-        validators: [Validators.required],
-      }),
-      contentType: new FormControl(attachmentRawValue.contentType, {
-        validators: [Validators.required],
-      }),
-      manytomanies: new FormControl(attachmentRawValue.manytomanies ?? []),
+      manytoone: new FormControl(attachmentRawValue.manytoone),
     });
   }
 
   getAttachment(form: AttachmentFormGroup): IAttachment | NewAttachment {
-    return this.convertAttachmentRawValueToAttachment(form.getRawValue() as AttachmentFormRawValue | NewAttachmentFormRawValue);
+    return form.getRawValue() as IAttachment | NewAttachment;
   }
 
   resetForm(form: AttachmentFormGroup, attachment: AttachmentFormGroupInput): void {
-    const attachmentRawValue = this.convertAttachmentToAttachmentRawValue({ ...this.getFormDefaults(), ...attachment });
+    const attachmentRawValue = { ...this.getFormDefaults(), ...attachment };
     form.reset(
       {
         ...attachmentRawValue,
@@ -98,31 +71,8 @@ export class AttachmentFormService {
   }
 
   private getFormDefaults(): AttachmentFormDefaults {
-    const currentTime = dayjs();
-
     return {
       id: null,
-      uploadedDate: currentTime,
-      manytomanies: [],
-    };
-  }
-
-  private convertAttachmentRawValueToAttachment(
-    rawAttachment: AttachmentFormRawValue | NewAttachmentFormRawValue
-  ): IAttachment | NewAttachment {
-    return {
-      ...rawAttachment,
-      uploadedDate: dayjs(rawAttachment.uploadedDate, DATE_TIME_FORMAT),
-    };
-  }
-
-  private convertAttachmentToAttachmentRawValue(
-    attachment: IAttachment | (Partial<NewAttachment> & AttachmentFormDefaults)
-  ): AttachmentFormRawValue | PartialWithRequiredKeyOf<NewAttachmentFormRawValue> {
-    return {
-      ...attachment,
-      uploadedDate: attachment.uploadedDate ? attachment.uploadedDate.format(DATE_TIME_FORMAT) : undefined,
-      manytomanies: attachment.manytomanies ?? [],
     };
   }
 }

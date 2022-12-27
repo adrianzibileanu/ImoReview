@@ -52,12 +52,12 @@ describe('Attachment Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call User query and add missing value', () => {
       const attachment: IAttachment = { id: 'CBA' };
-      const manytomanies: IUser[] = [{ id: '1e31be96-a1ca-4c18-96cd-67c0ce61e044' }];
-      attachment.manytomanies = manytomanies;
+      const manytoone: IUser = { id: '1e31be96-a1ca-4c18-96cd-67c0ce61e044' };
+      attachment.manytoone = manytoone;
 
       const userCollection: IUser[] = [{ id: '8188ad76-a54e-4c6a-a58f-7847a06789f4' }];
       jest.spyOn(userService, 'query').mockReturnValue(of(new HttpResponse({ body: userCollection })));
-      const additionalUsers = [...manytomanies];
+      const additionalUsers = [manytoone];
       const expectedCollection: IUser[] = [...additionalUsers, ...userCollection];
       jest.spyOn(userService, 'addUserToCollectionIfMissing').mockReturnValue(expectedCollection);
 
@@ -74,13 +74,13 @@ describe('Attachment Management Update Component', () => {
 
     it('Should update editForm', () => {
       const attachment: IAttachment = { id: 'CBA' };
-      const manytomany: IUser = { id: '73f3bfd4-4e19-42c9-87fe-3297026e749b' };
-      attachment.manytomanies = [manytomany];
+      const manytoone: IUser = { id: '73f3bfd4-4e19-42c9-87fe-3297026e749b' };
+      attachment.manytoone = manytoone;
 
       activatedRoute.data = of({ attachment });
       comp.ngOnInit();
 
-      expect(comp.usersSharedCollection).toContain(manytomany);
+      expect(comp.usersSharedCollection).toContain(manytoone);
       expect(comp.attachment).toEqual(attachment);
     });
   });

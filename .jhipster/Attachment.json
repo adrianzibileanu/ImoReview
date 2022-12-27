@@ -1,38 +1,20 @@
 {
-  "changelogDate": "20221222193011",
+  "changelogDate": "20221223222929",
+  "dto": "mapstruct",
   "fields": [
     {
-      "fieldName": "fileName",
+      "fieldName": "name",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "originalFileName",
-      "fieldType": "String",
+      "fieldName": "cvFile",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "any",
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "extension",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "sizeInBytes",
-      "fieldType": "Integer",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "uploadedDate",
-      "fieldType": "Instant",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "sha256",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "contentType",
+      "fieldName": "cvFileContentType",
       "fieldType": "String",
       "fieldValidateRules": ["required"]
     }
@@ -46,9 +28,9 @@
       "otherEntityName": "user",
       "otherEntityRelationshipName": "attachment",
       "ownerSide": true,
-      "relationshipName": "manytomany",
-      "relationshipType": "many-to-many"
+      "relationshipName": "manytoone",
+      "relationshipType": "many-to-one"
     }
   ],
-  "service": "no"
+  "service": "serviceImpl"
 }

@@ -1,7 +1,8 @@
 package com.imoreview.app.web.rest;
 
-import com.imoreview.app.domain.Attachment;
 import com.imoreview.app.repository.AttachmentRepository;
+import com.imoreview.app.service.AttachmentService;
+import com.imoreview.app.service.dto.AttachmentDTO;
 import com.imoreview.app.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -45,27 +46,30 @@ public class AttachmentResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    private final AttachmentService attachmentService;
+
     private final AttachmentRepository attachmentRepository;
 
-    public AttachmentResource(AttachmentRepository attachmentRepository) {
+    public AttachmentResource(AttachmentService attachmentService, AttachmentRepository attachmentRepository) {
+        this.attachmentService = attachmentService;
         this.attachmentRepository = attachmentRepository;
     }
 
     /**
      * {@code POST  /attachments} : Create a new attachment.
      *
-     * @param attachment the attachment to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new attachment, or with status {@code 400 (Bad Request)} if the attachment has already an ID.
+     * @param attachmentDTO the attachmentDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new attachmentDTO, or with status {@code 400 (Bad Request)} if the attachment has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/attachments")
-    public Mono<ResponseEntity<Attachment>> createAttachment(@Valid @RequestBody Attachment attachment) throws URISyntaxException {
-        log.debug("REST request to save Attachment : {}", attachment);
-        if (attachment.getId() != null) {
+    public Mono<ResponseEntity<AttachmentDTO>> createAttachment(@Valid @RequestBody AttachmentDTO attachmentDTO) throws URISyntaxException {
+        log.debug("REST request to save Attachment : {}", attachmentDTO);
+        if (attachmentDTO.getId() != null) {
             throw new BadRequestAlertException("A new attachment cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        return attachmentRepository
-            .save(attachment)
+        return attachmentService
+            .save(attachmentDTO)
             .map(result -> {
                 try {
                     return ResponseEntity
@@ -81,23 +85,23 @@ public class AttachmentResource {
     /**
      * {@code PUT  /attachments/:id} : Updates an existing attachment.
      *
-     * @param id the id of the attachment to save.
-     * @param attachment the attachment to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated attachment,
-     * or with status {@code 400 (Bad Request)} if the attachment is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the attachment couldn't be updated.
+     * @param id the id of the attachmentDTO to save.
+     * @param attachmentDTO the attachmentDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated attachmentDTO,
+     * or with status {@code 400 (Bad Request)} if the attachmentDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the attachmentDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/attachments/{id}")
-    public Mono<ResponseEntity<Attachment>> updateAttachment(
+    public Mono<ResponseEntity<AttachmentDTO>> updateAttachment(
         @PathVariable(value = "id", required = false) final String id,
-        @Valid @RequestBody Attachment attachment
+        @Valid @RequestBody AttachmentDTO attachmentDTO
     ) throws URISyntaxException {
-        log.debug("REST request to update Attachment : {}, {}", id, attachment);
-        if (attachment.getId() == null) {
+        log.debug("REST request to update Attachment : {}, {}", id, attachmentDTO);
+        if (attachmentDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, attachment.getId())) {
+        if (!Objects.equals(id, attachmentDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -108,8 +112,8 @@ public class AttachmentResource {
                     return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
                 }
 
-                return attachmentRepository
-                    .save(attachment)
+                return attachmentService
+                    .update(attachmentDTO)
                     .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                     .map(result ->
                         ResponseEntity
@@ -123,24 +127,24 @@ public class AttachmentResource {
     /**
      * {@code PATCH  /attachments/:id} : Partial updates given fields of an existing attachment, field will ignore if it is null
      *
-     * @param id the id of the attachment to save.
-     * @param attachment the attachment to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated attachment,
-     * or with status {@code 400 (Bad Request)} if the attachment is not valid,
-     * or with status {@code 404 (Not Found)} if the attachment is not found,
-     * or with status {@code 500 (Internal Server Error)} if the attachment couldn't be updated.
+     * @param id the id of the attachmentDTO to save.
+     * @param attachmentDTO the attachmentDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated attachmentDTO,
+     * or with status {@code 400 (Bad Request)} if the attachmentDTO is not valid,
+     * or with status {@code 404 (Not Found)} if the attachmentDTO is not found,
+     * or with status {@code 500 (Internal Server Error)} if the attachmentDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/attachments/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public Mono<ResponseEntity<Attachment>> partialUpdateAttachment(
+    public Mono<ResponseEntity<AttachmentDTO>> partialUpdateAttachment(
         @PathVariable(value = "id", required = false) final String id,
-        @NotNull @RequestBody Attachment attachment
+        @NotNull @RequestBody AttachmentDTO attachmentDTO
     ) throws URISyntaxException {
-        log.debug("REST request to partial update Attachment partially : {}, {}", id, attachment);
-        if (attachment.getId() == null) {
+        log.debug("REST request to partial update Attachment partially : {}, {}", id, attachmentDTO);
+        if (attachmentDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        if (!Objects.equals(id, attachment.getId())) {
+        if (!Objects.equals(id, attachmentDTO.getId())) {
             throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
         }
 
@@ -151,34 +155,7 @@ public class AttachmentResource {
                     return Mono.error(new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound"));
                 }
 
-                Mono<Attachment> result = attachmentRepository
-                    .findById(attachment.getId())
-                    .map(existingAttachment -> {
-                        if (attachment.getFileName() != null) {
-                            existingAttachment.setFileName(attachment.getFileName());
-                        }
-                        if (attachment.getOriginalFileName() != null) {
-                            existingAttachment.setOriginalFileName(attachment.getOriginalFileName());
-                        }
-                        if (attachment.getExtension() != null) {
-                            existingAttachment.setExtension(attachment.getExtension());
-                        }
-                        if (attachment.getSizeInBytes() != null) {
-                            existingAttachment.setSizeInBytes(attachment.getSizeInBytes());
-                        }
-                        if (attachment.getUploadedDate() != null) {
-                            existingAttachment.setUploadedDate(attachment.getUploadedDate());
-                        }
-                        if (attachment.getSha256() != null) {
-                            existingAttachment.setSha256(attachment.getSha256());
-                        }
-                        if (attachment.getContentType() != null) {
-                            existingAttachment.setContentType(attachment.getContentType());
-                        }
-
-                        return existingAttachment;
-                    })
-                    .flatMap(attachmentRepository::save);
+                Mono<AttachmentDTO> result = attachmentService.partialUpdate(attachmentDTO);
 
                 return result
                     .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
@@ -200,15 +177,15 @@ public class AttachmentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of attachments in body.
      */
     @GetMapping("/attachments")
-    public Mono<ResponseEntity<List<Attachment>>> getAllAttachments(
+    public Mono<ResponseEntity<List<AttachmentDTO>>> getAllAttachments(
         @org.springdoc.api.annotations.ParameterObject Pageable pageable,
         ServerHttpRequest request,
         @RequestParam(required = false, defaultValue = "false") boolean eagerload
     ) {
         log.debug("REST request to get a page of Attachments");
-        return attachmentRepository
-            .count()
-            .zipWith(attachmentRepository.findAllBy(pageable).collectList())
+        return attachmentService
+            .countAll()
+            .zipWith(attachmentService.findAll(pageable).collectList())
             .map(countWithEntities ->
                 ResponseEntity
                     .ok()
@@ -225,27 +202,27 @@ public class AttachmentResource {
     /**
      * {@code GET  /attachments/:id} : get the "id" attachment.
      *
-     * @param id the id of the attachment to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the attachment, or with status {@code 404 (Not Found)}.
+     * @param id the id of the attachmentDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the attachmentDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/attachments/{id}")
-    public Mono<ResponseEntity<Attachment>> getAttachment(@PathVariable String id) {
+    public Mono<ResponseEntity<AttachmentDTO>> getAttachment(@PathVariable String id) {
         log.debug("REST request to get Attachment : {}", id);
-        Mono<Attachment> attachment = attachmentRepository.findOneWithEagerRelationships(id);
-        return ResponseUtil.wrapOrNotFound(attachment);
+        Mono<AttachmentDTO> attachmentDTO = attachmentService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(attachmentDTO);
     }
 
     /**
      * {@code DELETE  /attachments/:id} : delete the "id" attachment.
      *
-     * @param id the id of the attachment to delete.
+     * @param id the id of the attachmentDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/attachments/{id}")
     public Mono<ResponseEntity<Void>> deleteAttachment(@PathVariable String id) {
         log.debug("REST request to delete Attachment : {}", id);
-        return attachmentRepository
-            .deleteById(id)
+        return attachmentService
+            .delete(id)
             .then(
                 Mono.just(
                     ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build()

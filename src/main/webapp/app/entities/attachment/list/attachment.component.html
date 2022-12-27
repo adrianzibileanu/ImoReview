@@ -38,45 +38,27 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="fileName">
+          <th scope="col" jhiSortBy="name">
             <div class="d-flex">
-              <span jhiTranslate="imoReviewApp.attachment.fileName">File Name</span>
+              <span jhiTranslate="imoReviewApp.attachment.name">Name</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="originalFileName">
+          <th scope="col" jhiSortBy="cvFile">
             <div class="d-flex">
-              <span jhiTranslate="imoReviewApp.attachment.originalFileName">Original File Name</span>
+              <span jhiTranslate="imoReviewApp.attachment.cvFile">Cv File</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="extension">
+          <th scope="col" jhiSortBy="cvFileContentType">
             <div class="d-flex">
-              <span jhiTranslate="imoReviewApp.attachment.extension">Extension</span>
+              <span jhiTranslate="imoReviewApp.attachment.cvFileContentType">Cv File Content Type</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="sizeInBytes">
+          <th scope="col" jhiSortBy="manytoone.login">
             <div class="d-flex">
-              <span jhiTranslate="imoReviewApp.attachment.sizeInBytes">Size In Bytes</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="uploadedDate">
-            <div class="d-flex">
-              <span jhiTranslate="imoReviewApp.attachment.uploadedDate">Uploaded Date</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="sha256">
-            <div class="d-flex">
-              <span jhiTranslate="imoReviewApp.attachment.sha256">Sha 256</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="contentType">
-            <div class="d-flex">
-              <span jhiTranslate="imoReviewApp.attachment.contentType">Content Type</span>
+              <span jhiTranslate="imoReviewApp.attachment.manytoone">Manytoone</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -88,13 +70,20 @@
           <td>
             <a [routerLink]="['/attachment', attachment.id, 'view']">{{ attachment.id }}</a>
           </td>
-          <td>{{ attachment.fileName }}</td>
-          <td>{{ attachment.originalFileName }}</td>
-          <td>{{ attachment.extension }}</td>
-          <td>{{ attachment.sizeInBytes }}</td>
-          <td>{{ attachment.uploadedDate | formatMediumDatetime }}</td>
-          <td>{{ attachment.sha256 }}</td>
-          <td>{{ attachment.contentType }}</td>
+          <td>{{ attachment.name }}</td>
+          <td>
+            <a
+              *ngIf="attachment.cvFile"
+              (click)="openFile(attachment.cvFile, attachment.cvFileContentType)"
+              jhiTranslate="entity.action.open"
+              >Deschidere</a
+            >
+            <span *ngIf="attachment.cvFile">{{ attachment.cvFileContentType }}, {{ byteSize(attachment.cvFile) }}</span>
+          </td>
+          <td>{{ attachment.cvFileContentType }}</td>
+          <td>
+            {{ attachment.manytoone?.login }}
+          </td>
           <td class="text-end">
             <div class="btn-group">
               <button

@@ -8,9 +8,10 @@ import static org.mockito.Mockito.*;
 import com.imoreview.app.IntegrationTest;
 import com.imoreview.app.domain.Attachment;
 import com.imoreview.app.repository.AttachmentRepository;
+import com.imoreview.app.service.AttachmentService;
+import com.imoreview.app.service.dto.AttachmentDTO;
+import com.imoreview.app.service.mapper.AttachmentMapper;
 import java.time.Duration;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +27,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.util.Base64Utils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -38,26 +40,16 @@ import reactor.core.publisher.Mono;
 @WithMockUser
 class AttachmentResourceIT {
 
-    private static final String DEFAULT_FILE_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_FILE_NAME = "BBBBBBBBBB";
+    private static final String DEFAULT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_ORIGINAL_FILE_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_ORIGINAL_FILE_NAME = "BBBBBBBBBB";
+    private static final byte[] DEFAULT_CV_FILE = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_CV_FILE = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_CV_FILE_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_CV_FILE_CONTENT_TYPE = "image/png";
 
-    private static final String DEFAULT_EXTENSION = "AAAAAAAAAA";
-    private static final String UPDATED_EXTENSION = "BBBBBBBBBB";
-
-    private static final Integer DEFAULT_SIZE_IN_BYTES = 1;
-    private static final Integer UPDATED_SIZE_IN_BYTES = 2;
-
-    private static final Instant DEFAULT_UPLOADED_DATE = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_UPLOADED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-
-    private static final String DEFAULT_SHA_256 = "AAAAAAAAAA";
-    private static final String UPDATED_SHA_256 = "BBBBBBBBBB";
-
-    private static final String DEFAULT_CONTENT_TYPE = "AAAAAAAAAA";
-    private static final String UPDATED_CONTENT_TYPE = "BBBBBBBBBB";
+    //  private static final String DEFAULT_CV_FILE_CONTENT_TYPE = "AAAAAAAAAA";
+    //  private static final String UPDATED_CV_FILE_CONTENT_TYPE = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/attachments";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -67,6 +59,12 @@ class AttachmentResourceIT {
 
     @Mock
     private AttachmentRepository attachmentRepositoryMock;
+
+    @Autowired
+    private AttachmentMapper attachmentMapper;
+
+    @Mock
+    private AttachmentService attachmentServiceMock;
 
     @Autowired
     private WebTestClient webTestClient;
@@ -81,13 +79,10 @@ class AttachmentResourceIT {
      */
     public static Attachment createEntity() {
         Attachment attachment = new Attachment()
-            .fileName(DEFAULT_FILE_NAME)
-            .originalFileName(DEFAULT_ORIGINAL_FILE_NAME)
-            .extension(DEFAULT_EXTENSION)
-            .sizeInBytes(DEFAULT_SIZE_IN_BYTES)
-            .uploadedDate(DEFAULT_UPLOADED_DATE)
-            .sha256(DEFAULT_SHA_256)
-            .contentType(DEFAULT_CONTENT_TYPE);
+            .name(DEFAULT_NAME)
+            .cvFile(DEFAULT_CV_FILE)
+            .cvFileContentType(DEFAULT_CV_FILE_CONTENT_TYPE)
+            .cvFileContentType(DEFAULT_CV_FILE_CONTENT_TYPE);
         return attachment;
     }
 
@@ -99,13 +94,10 @@ class AttachmentResourceIT {
      */
     public static Attachment createUpdatedEntity() {
         Attachment attachment = new Attachment()
-            .fileName(UPDATED_FILE_NAME)
-            .originalFileName(UPDATED_ORIGINAL_FILE_NAME)
-            .extension(UPDATED_EXTENSION)
-            .sizeInBytes(UPDATED_SIZE_IN_BYTES)
-            .uploadedDate(UPDATED_UPLOADED_DATE)
-            .sha256(UPDATED_SHA_256)
-            .contentType(UPDATED_CONTENT_TYPE);
+            .name(UPDATED_NAME)
+            .cvFile(UPDATED_CV_FILE)
+            .cvFileContentType(UPDATED_CV_FILE_CONTENT_TYPE)
+            .cvFileContentType(UPDATED_CV_FILE_CONTENT_TYPE);
         return attachment;
     }
 
@@ -119,11 +111,12 @@ class AttachmentResourceIT {
     void createAttachment() throws Exception {
         int databaseSizeBeforeCreate = attachmentRepository.findAll().collectList().block().size();
         // Create the Attachment
+        AttachmentDTO attachmentDTO = attachmentMapper.toDto(attachment);
         webTestClient
             .post()
             .uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(attachment))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(attachmentDTO))
             .exchange()
             .expectStatus()
             .isCreated();
@@ -132,19 +125,17 @@ class AttachmentResourceIT {
         List<Attachment> attachmentList = attachmentRepository.findAll().collectList().block();
         assertThat(attachmentList).hasSize(databaseSizeBeforeCreate + 1);
         Attachment testAttachment = attachmentList.get(attachmentList.size() - 1);
-        assertThat(testAttachment.getFileName()).isEqualTo(DEFAULT_FILE_NAME);
-        assertThat(testAttachment.getOriginalFileName()).isEqualTo(DEFAULT_ORIGINAL_FILE_NAME);
-        assertThat(testAttachment.getExtension()).isEqualTo(DEFAULT_EXTENSION);
-        assertThat(testAttachment.getSizeInBytes()).isEqualTo(DEFAULT_SIZE_IN_BYTES);
-        assertThat(testAttachment.getUploadedDate()).isEqualTo(DEFAULT_UPLOADED_DATE);
-        assertThat(testAttachment.getSha256()).isEqualTo(DEFAULT_SHA_256);
-        assertThat(testAttachment.getContentType()).isEqualTo(DEFAULT_CONTENT_TYPE);
+        assertThat(testAttachment.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testAttachment.getCvFile()).isEqualTo(DEFAULT_CV_FILE);
+        assertThat(testAttachment.getCvFileContentType()).isEqualTo(DEFAULT_CV_FILE_CONTENT_TYPE);
+        assertThat(testAttachment.getCvFileContentType()).isEqualTo(DEFAULT_CV_FILE_CONTENT_TYPE);
     }
 
     @Test
     void createAttachmentWithExistingId() throws Exception {
         // Create the Attachment with an existing ID
         attachment.setId("existing_id");
+        AttachmentDTO attachmentDTO = attachmentMapper.toDto(attachment);
 
         int databaseSizeBeforeCreate = attachmentRepository.findAll().collectList().block().size();
 
@@ -153,7 +144,7 @@ class AttachmentResourceIT {
             .post()
             .uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(attachment))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(attachmentDTO))
             .exchange()
             .expectStatus()
             .isBadRequest();
@@ -164,18 +155,19 @@ class AttachmentResourceIT {
     }
 
     @Test
-    void checkFileNameIsRequired() throws Exception {
+    void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = attachmentRepository.findAll().collectList().block().size();
         // set the field null
-        attachment.setFileName(null);
+        attachment.setName(null);
 
         // Create the Attachment, which fails.
+        AttachmentDTO attachmentDTO = attachmentMapper.toDto(attachment);
 
         webTestClient
             .post()
             .uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(attachment))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(attachmentDTO))
             .exchange()
             .expectStatus()
             .isBadRequest();
@@ -185,123 +177,19 @@ class AttachmentResourceIT {
     }
 
     @Test
-    void checkOriginalFileNameIsRequired() throws Exception {
+    void checkCvFileContentTypeIsRequired() throws Exception {
         int databaseSizeBeforeTest = attachmentRepository.findAll().collectList().block().size();
         // set the field null
-        attachment.setOriginalFileName(null);
+        attachment.setCvFileContentType(null);
 
         // Create the Attachment, which fails.
+        AttachmentDTO attachmentDTO = attachmentMapper.toDto(attachment);
 
         webTestClient
             .post()
             .uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(attachment))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
-
-        List<Attachment> attachmentList = attachmentRepository.findAll().collectList().block();
-        assertThat(attachmentList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    void checkExtensionIsRequired() throws Exception {
-        int databaseSizeBeforeTest = attachmentRepository.findAll().collectList().block().size();
-        // set the field null
-        attachment.setExtension(null);
-
-        // Create the Attachment, which fails.
-
-        webTestClient
-            .post()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(attachment))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
-
-        List<Attachment> attachmentList = attachmentRepository.findAll().collectList().block();
-        assertThat(attachmentList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    void checkSizeInBytesIsRequired() throws Exception {
-        int databaseSizeBeforeTest = attachmentRepository.findAll().collectList().block().size();
-        // set the field null
-        attachment.setSizeInBytes(null);
-
-        // Create the Attachment, which fails.
-
-        webTestClient
-            .post()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(attachment))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
-
-        List<Attachment> attachmentList = attachmentRepository.findAll().collectList().block();
-        assertThat(attachmentList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    void checkUploadedDateIsRequired() throws Exception {
-        int databaseSizeBeforeTest = attachmentRepository.findAll().collectList().block().size();
-        // set the field null
-        attachment.setUploadedDate(null);
-
-        // Create the Attachment, which fails.
-
-        webTestClient
-            .post()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(attachment))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
-
-        List<Attachment> attachmentList = attachmentRepository.findAll().collectList().block();
-        assertThat(attachmentList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    void checkSha256IsRequired() throws Exception {
-        int databaseSizeBeforeTest = attachmentRepository.findAll().collectList().block().size();
-        // set the field null
-        attachment.setSha256(null);
-
-        // Create the Attachment, which fails.
-
-        webTestClient
-            .post()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(attachment))
-            .exchange()
-            .expectStatus()
-            .isBadRequest();
-
-        List<Attachment> attachmentList = attachmentRepository.findAll().collectList().block();
-        assertThat(attachmentList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    void checkContentTypeIsRequired() throws Exception {
-        int databaseSizeBeforeTest = attachmentRepository.findAll().collectList().block().size();
-        // set the field null
-        attachment.setContentType(null);
-
-        // Create the Attachment, which fails.
-
-        webTestClient
-            .post()
-            .uri(ENTITY_API_URL)
-            .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(attachment))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(attachmentDTO))
             .exchange()
             .expectStatus()
             .isBadRequest();
@@ -328,34 +216,28 @@ class AttachmentResourceIT {
             .expectBody()
             .jsonPath("$.[*].id")
             .value(hasItem(attachment.getId()))
-            .jsonPath("$.[*].fileName")
-            .value(hasItem(DEFAULT_FILE_NAME))
-            .jsonPath("$.[*].originalFileName")
-            .value(hasItem(DEFAULT_ORIGINAL_FILE_NAME))
-            .jsonPath("$.[*].extension")
-            .value(hasItem(DEFAULT_EXTENSION))
-            .jsonPath("$.[*].sizeInBytes")
-            .value(hasItem(DEFAULT_SIZE_IN_BYTES))
-            .jsonPath("$.[*].uploadedDate")
-            .value(hasItem(DEFAULT_UPLOADED_DATE.toString()))
-            .jsonPath("$.[*].sha256")
-            .value(hasItem(DEFAULT_SHA_256))
-            .jsonPath("$.[*].contentType")
-            .value(hasItem(DEFAULT_CONTENT_TYPE));
+            .jsonPath("$.[*].name")
+            .value(hasItem(DEFAULT_NAME))
+            .jsonPath("$.[*].cvFileContentType")
+            .value(hasItem(DEFAULT_CV_FILE_CONTENT_TYPE))
+            .jsonPath("$.[*].cvFile")
+            .value(hasItem(Base64Utils.encodeToString(DEFAULT_CV_FILE)))
+            .jsonPath("$.[*].cvFileContentType")
+            .value(hasItem(DEFAULT_CV_FILE_CONTENT_TYPE));
     }
 
     @SuppressWarnings({ "unchecked" })
     void getAllAttachmentsWithEagerRelationshipsIsEnabled() {
-        when(attachmentRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(Flux.empty());
+        when(attachmentServiceMock.findAllWithEagerRelationships(any())).thenReturn(Flux.empty());
 
         webTestClient.get().uri(ENTITY_API_URL + "?eagerload=true").exchange().expectStatus().isOk();
 
-        verify(attachmentRepositoryMock, times(1)).findAllWithEagerRelationships(any());
+        verify(attachmentServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
     @SuppressWarnings({ "unchecked" })
     void getAllAttachmentsWithEagerRelationshipsIsNotEnabled() {
-        when(attachmentRepositoryMock.findAllWithEagerRelationships(any())).thenReturn(Flux.empty());
+        when(attachmentServiceMock.findAllWithEagerRelationships(any())).thenReturn(Flux.empty());
 
         webTestClient.get().uri(ENTITY_API_URL + "?eagerload=false").exchange().expectStatus().isOk();
         verify(attachmentRepositoryMock, times(1)).findAllWithEagerRelationships(any());
@@ -379,20 +261,14 @@ class AttachmentResourceIT {
             .expectBody()
             .jsonPath("$.id")
             .value(is(attachment.getId()))
-            .jsonPath("$.fileName")
-            .value(is(DEFAULT_FILE_NAME))
-            .jsonPath("$.originalFileName")
-            .value(is(DEFAULT_ORIGINAL_FILE_NAME))
-            .jsonPath("$.extension")
-            .value(is(DEFAULT_EXTENSION))
-            .jsonPath("$.sizeInBytes")
-            .value(is(DEFAULT_SIZE_IN_BYTES))
-            .jsonPath("$.uploadedDate")
-            .value(is(DEFAULT_UPLOADED_DATE.toString()))
-            .jsonPath("$.sha256")
-            .value(is(DEFAULT_SHA_256))
-            .jsonPath("$.contentType")
-            .value(is(DEFAULT_CONTENT_TYPE));
+            .jsonPath("$.name")
+            .value(is(DEFAULT_NAME))
+            .jsonPath("$.cvFileContentType")
+            .value(is(DEFAULT_CV_FILE_CONTENT_TYPE))
+            .jsonPath("$.cvFile")
+            .value(is(Base64Utils.encodeToString(DEFAULT_CV_FILE)))
+            .jsonPath("$.cvFileContentType")
+            .value(is(DEFAULT_CV_FILE_CONTENT_TYPE));
     }
 
     @Test
@@ -417,19 +293,17 @@ class AttachmentResourceIT {
         // Update the attachment
         Attachment updatedAttachment = attachmentRepository.findById(attachment.getId()).block();
         updatedAttachment
-            .fileName(UPDATED_FILE_NAME)
-            .originalFileName(UPDATED_ORIGINAL_FILE_NAME)
-            .extension(UPDATED_EXTENSION)
-            .sizeInBytes(UPDATED_SIZE_IN_BYTES)
-            .uploadedDate(UPDATED_UPLOADED_DATE)
-            .sha256(UPDATED_SHA_256)
-            .contentType(UPDATED_CONTENT_TYPE);
+            .name(UPDATED_NAME)
+            .cvFile(UPDATED_CV_FILE)
+            .cvFileContentType(UPDATED_CV_FILE_CONTENT_TYPE)
+            .cvFileContentType(UPDATED_CV_FILE_CONTENT_TYPE);
+        AttachmentDTO attachmentDTO = attachmentMapper.toDto(updatedAttachment);
 
         webTestClient
             .put()
-            .uri(ENTITY_API_URL_ID, updatedAttachment.getId())
+            .uri(ENTITY_API_URL_ID, attachmentDTO.getId())
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(updatedAttachment))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(attachmentDTO))
             .exchange()
             .expectStatus()
             .isOk();
@@ -438,13 +312,10 @@ class AttachmentResourceIT {
         List<Attachment> attachmentList = attachmentRepository.findAll().collectList().block();
         assertThat(attachmentList).hasSize(databaseSizeBeforeUpdate);
         Attachment testAttachment = attachmentList.get(attachmentList.size() - 1);
-        assertThat(testAttachment.getFileName()).isEqualTo(UPDATED_FILE_NAME);
-        assertThat(testAttachment.getOriginalFileName()).isEqualTo(UPDATED_ORIGINAL_FILE_NAME);
-        assertThat(testAttachment.getExtension()).isEqualTo(UPDATED_EXTENSION);
-        assertThat(testAttachment.getSizeInBytes()).isEqualTo(UPDATED_SIZE_IN_BYTES);
-        assertThat(testAttachment.getUploadedDate()).isEqualTo(UPDATED_UPLOADED_DATE);
-        assertThat(testAttachment.getSha256()).isEqualTo(UPDATED_SHA_256);
-        assertThat(testAttachment.getContentType()).isEqualTo(UPDATED_CONTENT_TYPE);
+        assertThat(testAttachment.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testAttachment.getCvFile()).isEqualTo(UPDATED_CV_FILE);
+        assertThat(testAttachment.getCvFileContentType()).isEqualTo(UPDATED_CV_FILE_CONTENT_TYPE);
+        assertThat(testAttachment.getCvFileContentType()).isEqualTo(UPDATED_CV_FILE_CONTENT_TYPE);
     }
 
     @Test
@@ -452,12 +323,15 @@ class AttachmentResourceIT {
         int databaseSizeBeforeUpdate = attachmentRepository.findAll().collectList().block().size();
         attachment.setId(UUID.randomUUID().toString());
 
+        // Create the Attachment
+        AttachmentDTO attachmentDTO = attachmentMapper.toDto(attachment);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         webTestClient
             .put()
-            .uri(ENTITY_API_URL_ID, attachment.getId())
+            .uri(ENTITY_API_URL_ID, attachmentDTO.getId())
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(attachment))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(attachmentDTO))
             .exchange()
             .expectStatus()
             .isBadRequest();
@@ -472,12 +346,15 @@ class AttachmentResourceIT {
         int databaseSizeBeforeUpdate = attachmentRepository.findAll().collectList().block().size();
         attachment.setId(UUID.randomUUID().toString());
 
+        // Create the Attachment
+        AttachmentDTO attachmentDTO = attachmentMapper.toDto(attachment);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .put()
             .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(attachment))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(attachmentDTO))
             .exchange()
             .expectStatus()
             .isBadRequest();
@@ -492,12 +369,15 @@ class AttachmentResourceIT {
         int databaseSizeBeforeUpdate = attachmentRepository.findAll().collectList().block().size();
         attachment.setId(UUID.randomUUID().toString());
 
+        // Create the Attachment
+        AttachmentDTO attachmentDTO = attachmentMapper.toDto(attachment);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .put()
             .uri(ENTITY_API_URL)
             .contentType(MediaType.APPLICATION_JSON)
-            .bodyValue(TestUtil.convertObjectToJsonBytes(attachment))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(attachmentDTO))
             .exchange()
             .expectStatus()
             .isEqualTo(405);
@@ -518,10 +398,7 @@ class AttachmentResourceIT {
         Attachment partialUpdatedAttachment = new Attachment();
         partialUpdatedAttachment.setId(attachment.getId());
 
-        partialUpdatedAttachment
-            .originalFileName(UPDATED_ORIGINAL_FILE_NAME)
-            .sizeInBytes(UPDATED_SIZE_IN_BYTES)
-            .contentType(UPDATED_CONTENT_TYPE);
+        partialUpdatedAttachment.cvFile(UPDATED_CV_FILE).cvFileContentType(UPDATED_CV_FILE_CONTENT_TYPE);
 
         webTestClient
             .patch()
@@ -536,13 +413,10 @@ class AttachmentResourceIT {
         List<Attachment> attachmentList = attachmentRepository.findAll().collectList().block();
         assertThat(attachmentList).hasSize(databaseSizeBeforeUpdate);
         Attachment testAttachment = attachmentList.get(attachmentList.size() - 1);
-        assertThat(testAttachment.getFileName()).isEqualTo(DEFAULT_FILE_NAME);
-        assertThat(testAttachment.getOriginalFileName()).isEqualTo(UPDATED_ORIGINAL_FILE_NAME);
-        assertThat(testAttachment.getExtension()).isEqualTo(DEFAULT_EXTENSION);
-        assertThat(testAttachment.getSizeInBytes()).isEqualTo(UPDATED_SIZE_IN_BYTES);
-        assertThat(testAttachment.getUploadedDate()).isEqualTo(DEFAULT_UPLOADED_DATE);
-        assertThat(testAttachment.getSha256()).isEqualTo(DEFAULT_SHA_256);
-        assertThat(testAttachment.getContentType()).isEqualTo(UPDATED_CONTENT_TYPE);
+        assertThat(testAttachment.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testAttachment.getCvFile()).isEqualTo(UPDATED_CV_FILE);
+        assertThat(testAttachment.getCvFileContentType()).isEqualTo(UPDATED_CV_FILE_CONTENT_TYPE);
+        assertThat(testAttachment.getCvFileContentType()).isEqualTo(DEFAULT_CV_FILE_CONTENT_TYPE);
     }
 
     @Test
@@ -557,13 +431,10 @@ class AttachmentResourceIT {
         partialUpdatedAttachment.setId(attachment.getId());
 
         partialUpdatedAttachment
-            .fileName(UPDATED_FILE_NAME)
-            .originalFileName(UPDATED_ORIGINAL_FILE_NAME)
-            .extension(UPDATED_EXTENSION)
-            .sizeInBytes(UPDATED_SIZE_IN_BYTES)
-            .uploadedDate(UPDATED_UPLOADED_DATE)
-            .sha256(UPDATED_SHA_256)
-            .contentType(UPDATED_CONTENT_TYPE);
+            .name(UPDATED_NAME)
+            .cvFile(UPDATED_CV_FILE)
+            .cvFileContentType(UPDATED_CV_FILE_CONTENT_TYPE)
+            .cvFileContentType(UPDATED_CV_FILE_CONTENT_TYPE);
 
         webTestClient
             .patch()
@@ -578,13 +449,10 @@ class AttachmentResourceIT {
         List<Attachment> attachmentList = attachmentRepository.findAll().collectList().block();
         assertThat(attachmentList).hasSize(databaseSizeBeforeUpdate);
         Attachment testAttachment = attachmentList.get(attachmentList.size() - 1);
-        assertThat(testAttachment.getFileName()).isEqualTo(UPDATED_FILE_NAME);
-        assertThat(testAttachment.getOriginalFileName()).isEqualTo(UPDATED_ORIGINAL_FILE_NAME);
-        assertThat(testAttachment.getExtension()).isEqualTo(UPDATED_EXTENSION);
-        assertThat(testAttachment.getSizeInBytes()).isEqualTo(UPDATED_SIZE_IN_BYTES);
-        assertThat(testAttachment.getUploadedDate()).isEqualTo(UPDATED_UPLOADED_DATE);
-        assertThat(testAttachment.getSha256()).isEqualTo(UPDATED_SHA_256);
-        assertThat(testAttachment.getContentType()).isEqualTo(UPDATED_CONTENT_TYPE);
+        assertThat(testAttachment.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testAttachment.getCvFile()).isEqualTo(UPDATED_CV_FILE);
+        assertThat(testAttachment.getCvFileContentType()).isEqualTo(UPDATED_CV_FILE_CONTENT_TYPE);
+        assertThat(testAttachment.getCvFileContentType()).isEqualTo(UPDATED_CV_FILE_CONTENT_TYPE);
     }
 
     @Test
@@ -592,12 +460,15 @@ class AttachmentResourceIT {
         int databaseSizeBeforeUpdate = attachmentRepository.findAll().collectList().block().size();
         attachment.setId(UUID.randomUUID().toString());
 
+        // Create the Attachment
+        AttachmentDTO attachmentDTO = attachmentMapper.toDto(attachment);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         webTestClient
             .patch()
-            .uri(ENTITY_API_URL_ID, attachment.getId())
+            .uri(ENTITY_API_URL_ID, attachmentDTO.getId())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(TestUtil.convertObjectToJsonBytes(attachment))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(attachmentDTO))
             .exchange()
             .expectStatus()
             .isBadRequest();
@@ -612,12 +483,15 @@ class AttachmentResourceIT {
         int databaseSizeBeforeUpdate = attachmentRepository.findAll().collectList().block().size();
         attachment.setId(UUID.randomUUID().toString());
 
+        // Create the Attachment
+        AttachmentDTO attachmentDTO = attachmentMapper.toDto(attachment);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .patch()
             .uri(ENTITY_API_URL_ID, UUID.randomUUID().toString())
             .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(TestUtil.convertObjectToJsonBytes(attachment))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(attachmentDTO))
             .exchange()
             .expectStatus()
             .isBadRequest();
@@ -632,12 +506,15 @@ class AttachmentResourceIT {
         int databaseSizeBeforeUpdate = attachmentRepository.findAll().collectList().block().size();
         attachment.setId(UUID.randomUUID().toString());
 
+        // Create the Attachment
+        AttachmentDTO attachmentDTO = attachmentMapper.toDto(attachment);
+
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         webTestClient
             .patch()
             .uri(ENTITY_API_URL)
             .contentType(MediaType.valueOf("application/merge-patch+json"))
-            .bodyValue(TestUtil.convertObjectToJsonBytes(attachment))
+            .bodyValue(TestUtil.convertObjectToJsonBytes(attachmentDTO))
             .exchange()
             .expectStatus()
             .isEqualTo(405);

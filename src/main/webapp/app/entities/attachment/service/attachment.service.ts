@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
@@ -10,16 +8,6 @@ import { createRequestOption } from 'app/core/request/request-util';
 import { IAttachment, NewAttachment } from '../attachment.model';
 
 export type PartialUpdateAttachment = Partial<IAttachment> & Pick<IAttachment, 'id'>;
-
-type RestOf<T extends IAttachment | NewAttachment> = Omit<T, 'uploadedDate'> & {
-  uploadedDate?: string | null;
-};
-
-export type RestAttachment = RestOf<IAttachment>;
-
-export type NewRestAttachment = RestOf<NewAttachment>;
-
-export type PartialUpdateRestAttachment = RestOf<PartialUpdateAttachment>;
 
 export type EntityResponseType = HttpResponse<IAttachment>;
 export type EntityArrayResponseType = HttpResponse<IAttachment[]>;
@@ -31,37 +19,28 @@ export class AttachmentService {
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   create(attachment: NewAttachment): Observable<EntityResponseType> {
-    const copy = this.convertDateFromClient(attachment);
-    return this.http
-      .post<RestAttachment>(this.resourceUrl, copy, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+    return this.http.post<IAttachment>(this.resourceUrl, attachment, { observe: 'response' });
   }
 
   update(attachment: IAttachment): Observable<EntityResponseType> {
-    const copy = this.convertDateFromClient(attachment);
-    return this.http
-      .put<RestAttachment>(`${this.resourceUrl}/${this.getAttachmentIdentifier(attachment)}`, copy, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+    return this.http.put<IAttachment>(`${this.resourceUrl}/${this.getAttachmentIdentifier(attachment)}`, attachment, {
+      observe: 'response',
+    });
   }
 
   partialUpdate(attachment: PartialUpdateAttachment): Observable<EntityResponseType> {
-    const copy = this.convertDateFromClient(attachment);
-    return this.http
-      .patch<RestAttachment>(`${this.resourceUrl}/${this.getAttachmentIdentifier(attachment)}`, copy, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+    return this.http.patch<IAttachment>(`${this.resourceUrl}/${this.getAttachmentIdentifier(attachment)}`, attachment, {
+      observe: 'response',
+    });
   }
 
   find(id: string): Observable<EntityResponseType> {
-    return this.http
-      .get<RestAttachment>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-      .pipe(map(res => this.convertResponseFromServer(res)));
+    return this.http.get<IAttachment>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http
-      .get<RestAttachment[]>(this.resourceUrl, { params: options, observe: 'response' })
-      .pipe(map(res => this.convertResponseArrayFromServer(res)));
+    return this.http.get<IAttachment[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
   delete(id: string): Observable<HttpResponse<{}>> {
@@ -94,31 +73,5 @@ export class AttachmentService {
       return [...attachmentsToAdd, ...attachmentCollection];
     }
     return attachmentCollection;
-  }
-
-  protected convertDateFromClient<T extends IAttachment | NewAttachment | PartialUpdateAttachment>(attachment: T): RestOf<T> {
-    return {
-      ...attachment,
-      uploadedDate: attachment.uploadedDate?.toJSON() ?? null,
-    };
-  }
-
-  protected convertDateFromServer(restAttachment: RestAttachment): IAttachment {
-    return {
-      ...restAttachment,
-      uploadedDate: restAttachment.uploadedDate ? dayjs(restAttachment.uploadedDate) : undefined,
-    };
-  }
-
-  protected convertResponseFromServer(res: HttpResponse<RestAttachment>): HttpResponse<IAttachment> {
-    return res.clone({
-      body: res.body ? this.convertDateFromServer(res.body) : null,
-    });
-  }
-
-  protected convertResponseArrayFromServer(res: HttpResponse<RestAttachment[]>): HttpResponse<IAttachment[]> {
-    return res.clone({
-      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
-    });
   }
 }
