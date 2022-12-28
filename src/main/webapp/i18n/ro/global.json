@@ -15,11 +15,11 @@
         "sub": "Abonamente",
         "payment": "Plata",
         "attachment": "Documente",
-        "attachment": "Attachment",
-        "imob": "Imob",
-        "review": "Review",
-        "sub": "Sub",
-        "payment": "Payment",
+        "attachment": "Documente",
+        "imob": "Anunturi",
+        "review": "Recenzii",
+        "sub": "Abonamente",
+        "payment": "Plati",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

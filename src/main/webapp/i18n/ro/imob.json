@@ -3,14 +3,14 @@
     "imob": {
       "home": {
         "title": "Anunturi",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Creeare o nouă entitate anunt",
-        "createOrEditLabel": "Creeare sau editare anunt",
-        "notFound": "Nu a fost gasit nici un anunt"
+        "refreshListLabel": "Actualizare lista",
+        "createLabel": "Adauga un nou anunt",
+        "createOrEditLabel": "Adauga sau editeaza anunt",
+        "notFound": "Nu a fost gasit nici un anunt."
       },
       "created": "Anuntul dumneavoastra a fost adaugat cu codul de identificare: {{ param }}",
       "updated": "Anuntul dumneavoastra cu codul de identificare {{ param }} a fost actualizat",
-      "deleted": "Anuntul dumneavoastra cu codul deidentificare {{ param }} a fost ștears",
+      "deleted": "Anuntul dumneavoastra cu codul deidentificare {{ param }} a fost șters",
       "delete": {
         "question": "Sunteți sigur că doriți să ștergeți anuntul cu numarul {{ id }}?"
       },

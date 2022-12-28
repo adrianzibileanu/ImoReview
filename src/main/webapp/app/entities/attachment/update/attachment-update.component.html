@@ -102,9 +102,10 @@
             name="manytoone"
             formControlName="manytoone"
             [compareWith]="compareUser"
+            [(ngModel)]="currentAcc"
           >
-            <option [ngValue]="null"></option>
-            <option [ngValue]="userOption" *ngFor="let userOption of usersSharedCollection">{{ userOption.login }}</option>
+            <!--option [ngValue]="currentAcc" *ngFor="let userOption of usersSharedCollection;let i = index" [attr.data-index]="i" [selected]="userOption == currentAcc">{{ userOption.login }}</option-->
+            <option [disabled]="true" [ngValue]="currentAcc">{{ currentAcc.login }}</option>
           </select>
         </div>
       </div>

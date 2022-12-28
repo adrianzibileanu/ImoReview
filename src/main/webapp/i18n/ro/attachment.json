@@ -2,26 +2,26 @@
   "imoReviewApp": {
     "attachment": {
       "home": {
-        "title": "Attachments",
-        "refreshListLabel": "Refresh list",
-        "createLabel": "Creeare o nouă entitate Attachment",
-        "createOrEditLabel": "Creeare sau editare Attachment",
-        "notFound": "No Attachments found"
+        "title": "Documente",
+        "refreshListLabel": "Actualizare lista",
+        "createLabel": "Incarca document",
+        "createOrEditLabel": "Incarca sau editeaza document",
+        "notFound": "Nu a fost gasit nici un document."
       },
-      "created": "A fost creată o nouă entitate Attachment cu identificatorul {{ param }}",
-      "updated": "Attachment cu identificatorul {{ param }} a fost actualizată",
-      "deleted": "Attachment cu identificatorul {{ param }} a fost ștearsă",
+      "created": "A fost incarcat documentul cu numarul {{ param }}",
+      "updated": "Documentul cu numarul {{ param }} a fost actualizat",
+      "deleted": "Documentul cu numarul {{ param }} a fost șters",
       "delete": {
-        "question": "Sunteți sigur că doriți să ștergeți Attachment {{ id }}?"
+        "question": "Sunteți sigur că doriți să ștergeți documentul cu numarul {{ id }}?"
       },
       "detail": {
-        "title": "Attachment"
+        "title": "Document"
       },
       "id": "ID",
-      "name": "Name",
-      "cvFile": "Cv File",
-      "cvFileContentType": "Cv File Content Type",
-      "manytoone": "Manytoone"
+      "name": "Nume Fisier",
+      "cvFile": "Fisier",
+      "cvFileContentType": "Content Type",
+      "manytoone": "Utilizator"
     }
   }
 }
