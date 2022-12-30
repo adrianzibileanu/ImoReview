@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { ActivatedRoute, Data, ParamMap, Router } from '@angular/router';
-import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
+import { combineLatest, filter, Observable, Subject, switchMap, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { IAttachment } from '../attachment.model';
@@ -11,6 +11,9 @@ import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/conf
 import { EntityArrayResponseType, AttachmentService } from '../service/attachment.service';
 import { AttachmentDeleteDialogComponent } from '../delete/attachment-delete-dialog.component';
 import { DataUtils } from 'app/core/util/data-util.service';
+import { takeUntil } from 'rxjs/operators';
+import { AccountService } from '../../../core/auth/account.service';
+import { Account } from '../../../core/auth/account.model';
 
 @Component({
   selector: 'jhi-attachment',
@@ -18,6 +21,7 @@ import { DataUtils } from 'app/core/util/data-util.service';
 })
 export class AttachmentComponent implements OnInit {
   attachments?: IAttachment[];
+
   isLoading = false;
 
   predicate = 'id';
@@ -27,18 +31,26 @@ export class AttachmentComponent implements OnInit {
   totalItems = 0;
   page = 1;
 
+  account: Account | null = null;
+  accountLogin?: string;
+  private readonly destroy$ = new Subject<void>();
+
+  userFilter = { manytoone: { login: this.getCurrentUser() } };
+
   constructor(
     protected attachmentService: AttachmentService,
     protected activatedRoute: ActivatedRoute,
     public router: Router,
     protected dataUtils: DataUtils,
-    protected modalService: NgbModal
+    protected modalService: NgbModal,
+    protected accountService: AccountService
   ) {}
 
   trackId = (_index: number, item: IAttachment): string => this.attachmentService.getAttachmentIdentifier(item);
 
   ngOnInit(): void {
     this.load();
+    this.getCurrentUser();
   }
 
   byteSize(base64String: string): string {
@@ -141,6 +153,27 @@ export class AttachmentComponent implements OnInit {
       return [];
     } else {
       return [predicate + ',' + ascendingQueryParam];
+    }
+  }
+
+  getCurrentUser(): string {
+    // make attachment uploadable only to the logged user
+    this.accountService.getAuthenticationState();
+    this.accountService
+      .getAuthenticationState()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(account => {
+        this.account = account;
+        if (this.account) {
+          this.accountLogin = this.account.login;
+        } else {
+          this.accountLogin = '';
+        }
+      });
+    if (this.accountLogin) {
+      return this.accountLogin;
+    } else {
+      return '';
     }
   }
 }

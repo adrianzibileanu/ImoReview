@@ -1,9 +1,12 @@
 package com.imoreview.app.web.rest;
 
+import static com.mongodb.client.model.Filters.*;
+
 import com.imoreview.app.repository.AttachmentRepository;
 import com.imoreview.app.service.AttachmentService;
 import com.imoreview.app.service.dto.AttachmentDTO;
 import com.imoreview.app.web.rest.errors.BadRequestAlertException;
+import com.mongodb.lang.Nullable;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -12,6 +15,7 @@ import java.util.Objects;
 import java.util.Optional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import org.bson.conversions.Bson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,6 +53,10 @@ public class AttachmentResource {
     private final AttachmentService attachmentService;
 
     private final AttachmentRepository attachmentRepository;
+
+    public Bson equalComparison = eq("manytoone.login", "admin");
+
+    //collection.find(equalComparison).forEach(doc -> System.out.println(doc.toJson()));
 
     public AttachmentResource(AttachmentService attachmentService, AttachmentRepository attachmentRepository) {
         this.attachmentService = attachmentService;
@@ -183,6 +191,7 @@ public class AttachmentResource {
         @RequestParam(required = false, defaultValue = "false") boolean eagerload
     ) {
         log.debug("REST request to get a page of Attachments");
+        eq("manytoone.login", "admin");
         return attachmentService
             .countAll()
             .zipWith(attachmentService.findAll(pageable).collectList())
