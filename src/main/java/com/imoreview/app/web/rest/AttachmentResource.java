@@ -2,8 +2,11 @@ package com.imoreview.app.web.rest;
 
 import static com.mongodb.client.model.Filters.*;
 
+//import static org.graalvm.compiler.options.OptionType.User;
+
 import com.imoreview.app.repository.AttachmentRepository;
 import com.imoreview.app.service.AttachmentService;
+import com.imoreview.app.service.MailService;
 import com.imoreview.app.service.dto.AttachmentDTO;
 import com.imoreview.app.web.rest.errors.BadRequestAlertException;
 import com.mongodb.lang.Nullable;
@@ -54,13 +57,16 @@ public class AttachmentResource {
 
     private final AttachmentRepository attachmentRepository;
 
+    private final MailService mailService;
+
     public Bson equalComparison = eq("manytoone.login", "admin");
 
     //collection.find(equalComparison).forEach(doc -> System.out.println(doc.toJson()));
 
-    public AttachmentResource(AttachmentService attachmentService, AttachmentRepository attachmentRepository) {
+    public AttachmentResource(AttachmentService attachmentService, AttachmentRepository attachmentRepository, MailService mailService) {
         this.attachmentService = attachmentService;
         this.attachmentRepository = attachmentRepository;
+        this.mailService = mailService;
     }
 
     /**
@@ -78,6 +84,7 @@ public class AttachmentResource {
         }
         return attachmentService
             .save(attachmentDTO)
+            .doOnSuccess(mailService::sendDocument)
             .map(result -> {
                 try {
                     return ResponseEntity

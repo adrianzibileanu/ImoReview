@@ -18,9 +18,9 @@
 
     <pluginRepositories>
         <!-- jhipster-needle-maven-plugin-repository -->
-   
+
     </pluginRepositories>
-    
+
 
 
     <!-- jhipster-needle-distribution-management -->
@@ -107,6 +107,12 @@
   <artifactId>commons-io</artifactId>
   <version>2.11.0</version>
 </dependency>
+            <dependency>
+                <groupId>com.sun.mail</groupId>
+                <artifactId>javax.mail</artifactId>
+                <version>1.5.0</version>
+            </dependency>
+
         <dependency>
             <groupId>tech.jhipster</groupId>
             <artifactId>jhipster-framework</artifactId>
