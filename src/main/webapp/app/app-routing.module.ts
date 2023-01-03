@@ -7,6 +7,7 @@ import { DEBUG_INFO_ENABLED } from 'app/app.constants';
 import { Authority } from 'app/config/authority.constants';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
+import { AttachmentRoutingResolveService } from './entities/attachment/route/attachment-routing-resolve.service';
 
 @NgModule({
   imports: [
@@ -19,6 +20,14 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
           },
           canActivate: [UserRouteAccessService],
           loadChildren: () => import('./admin/admin-routing.module').then(m => m.AdminRoutingModule),
+        },
+        {
+          path: 'attachments',
+          data: {
+            authorities: [Authority.SUBSCRIBED, Authority.ADMIN],
+          },
+          canActivate: [AttachmentRoutingResolveService],
+          loadChildren: () => import('./entities/attachment/route/attachment-routing.module').then(m => m.AttachmentRoutingModule),
         },
         {
           path: 'account',

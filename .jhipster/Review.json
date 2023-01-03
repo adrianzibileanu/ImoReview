@@ -19,22 +19,12 @@
       "fieldName": "rating",
       "fieldType": "Integer",
       "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "isImob",
-      "fieldType": "Boolean"
     }
   ],
   "name": "Review",
   "pagination": "infinite-scroll",
   "readOnly": false,
   "relationships": [
-    {
-      "otherEntityField": "id",
-      "otherEntityName": "imob",
-      "relationshipName": "imobID",
-      "relationshipType": "many-to-one"
-    },
     {
       "otherEntityField": "login",
       "otherEntityName": "user",

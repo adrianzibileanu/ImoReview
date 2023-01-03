@@ -45,9 +45,6 @@ class ReviewResourceIT {
     private static final Integer DEFAULT_RATING = 1;
     private static final Integer UPDATED_RATING = 2;
 
-    private static final Boolean DEFAULT_IS_IMOB = false;
-    private static final Boolean UPDATED_IS_IMOB = true;
-
     private static final String ENTITY_API_URL = "/api/reviews";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
@@ -69,7 +66,7 @@ class ReviewResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Review createEntity() {
-        Review review = new Review().title(DEFAULT_TITLE).body(DEFAULT_BODY).rating(DEFAULT_RATING).isImob(DEFAULT_IS_IMOB);
+        Review review = new Review().title(DEFAULT_TITLE).body(DEFAULT_BODY).rating(DEFAULT_RATING);
         return review;
     }
 
@@ -80,7 +77,7 @@ class ReviewResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Review createUpdatedEntity() {
-        Review review = new Review().title(UPDATED_TITLE).body(UPDATED_BODY).rating(UPDATED_RATING).isImob(UPDATED_IS_IMOB);
+        Review review = new Review().title(UPDATED_TITLE).body(UPDATED_BODY).rating(UPDATED_RATING);
         return review;
     }
 
@@ -110,7 +107,6 @@ class ReviewResourceIT {
         assertThat(testReview.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testReview.getBody()).isEqualTo(DEFAULT_BODY);
         assertThat(testReview.getRating()).isEqualTo(DEFAULT_RATING);
-        assertThat(testReview.getIsImob()).isEqualTo(DEFAULT_IS_IMOB);
     }
 
     @Test
@@ -221,9 +217,7 @@ class ReviewResourceIT {
             .jsonPath("$.[*].body")
             .value(hasItem(DEFAULT_BODY))
             .jsonPath("$.[*].rating")
-            .value(hasItem(DEFAULT_RATING))
-            .jsonPath("$.[*].isImob")
-            .value(hasItem(DEFAULT_IS_IMOB.booleanValue()));
+            .value(hasItem(DEFAULT_RATING));
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -266,9 +260,7 @@ class ReviewResourceIT {
             .jsonPath("$.body")
             .value(is(DEFAULT_BODY))
             .jsonPath("$.rating")
-            .value(is(DEFAULT_RATING))
-            .jsonPath("$.isImob")
-            .value(is(DEFAULT_IS_IMOB.booleanValue()));
+            .value(is(DEFAULT_RATING));
     }
 
     @Test
@@ -292,7 +284,7 @@ class ReviewResourceIT {
 
         // Update the review
         Review updatedReview = reviewRepository.findById(review.getId()).block();
-        updatedReview.title(UPDATED_TITLE).body(UPDATED_BODY).rating(UPDATED_RATING).isImob(UPDATED_IS_IMOB);
+        updatedReview.title(UPDATED_TITLE).body(UPDATED_BODY).rating(UPDATED_RATING);
 
         webTestClient
             .put()
@@ -310,7 +302,6 @@ class ReviewResourceIT {
         assertThat(testReview.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testReview.getBody()).isEqualTo(UPDATED_BODY);
         assertThat(testReview.getRating()).isEqualTo(UPDATED_RATING);
-        assertThat(testReview.getIsImob()).isEqualTo(UPDATED_IS_IMOB);
     }
 
     @Test
@@ -384,7 +375,7 @@ class ReviewResourceIT {
         Review partialUpdatedReview = new Review();
         partialUpdatedReview.setId(review.getId());
 
-        partialUpdatedReview.rating(UPDATED_RATING).isImob(UPDATED_IS_IMOB);
+        partialUpdatedReview.rating(UPDATED_RATING);
 
         webTestClient
             .patch()
@@ -402,7 +393,6 @@ class ReviewResourceIT {
         assertThat(testReview.getTitle()).isEqualTo(DEFAULT_TITLE);
         assertThat(testReview.getBody()).isEqualTo(DEFAULT_BODY);
         assertThat(testReview.getRating()).isEqualTo(UPDATED_RATING);
-        assertThat(testReview.getIsImob()).isEqualTo(UPDATED_IS_IMOB);
     }
 
     @Test
@@ -416,7 +406,7 @@ class ReviewResourceIT {
         Review partialUpdatedReview = new Review();
         partialUpdatedReview.setId(review.getId());
 
-        partialUpdatedReview.title(UPDATED_TITLE).body(UPDATED_BODY).rating(UPDATED_RATING).isImob(UPDATED_IS_IMOB);
+        partialUpdatedReview.title(UPDATED_TITLE).body(UPDATED_BODY).rating(UPDATED_RATING);
 
         webTestClient
             .patch()
@@ -434,7 +424,6 @@ class ReviewResourceIT {
         assertThat(testReview.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testReview.getBody()).isEqualTo(UPDATED_BODY);
         assertThat(testReview.getRating()).isEqualTo(UPDATED_RATING);
-        assertThat(testReview.getIsImob()).isEqualTo(UPDATED_IS_IMOB);
     }
 
     @Test

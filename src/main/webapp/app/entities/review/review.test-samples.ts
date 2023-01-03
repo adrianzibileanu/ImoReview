@@ -8,24 +8,23 @@ export const sampleWithRequiredData: IReview = {
 };
 
 export const sampleWithPartialData: IReview = {
-  id: '3cbc862f-5c02-4df6-9609-322f06a2d8be',
-  title: 'blue',
-  body: 'Saint Frozen',
-  rating: 68440,
+  id: '43cbc862-f5c0-42df-a960-9322f06a2d8b',
+  title: 'mint Fantastic Froze',
+  body: 'bandwidth fuchsia payment',
+  rating: 79520,
 };
 
 export const sampleWithFullData: IReview = {
-  id: 'b153d9a8-4cdc-4914-bb73-8bdcdce329d1',
-  title: 'synthesizing bus Zlo',
-  body: 'open-source synthesize wireless',
-  rating: 25554,
-  isImob: true,
+  id: 'dc9143b7-38bd-4cdc-a329-d1ddcbbd6ba4',
+  title: 'open-source synthesi',
+  body: 'matrix',
+  rating: 76328,
 };
 
 export const sampleWithNewData: NewReview = {
-  title: 'enterprise Alba Acco',
-  body: 'Checking killer',
-  rating: 92443,
+  title: 'Alba',
+  body: 'USB Checking',
+  rating: 35734,
   id: null,
 };
 

@@ -9,8 +9,6 @@ import { of, Subject, from } from 'rxjs';
 import { ReviewFormService } from './review-form.service';
 import { ReviewService } from '../service/review.service';
 import { IReview } from '../review.model';
-import { IImob } from 'app/entities/imob/imob.model';
-import { ImobService } from 'app/entities/imob/service/imob.service';
 
 import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/user.service';
@@ -23,7 +21,6 @@ describe('Review Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let reviewFormService: ReviewFormService;
   let reviewService: ReviewService;
-  let imobService: ImobService;
   let userService: UserService;
 
   beforeEach(() => {
@@ -47,35 +44,12 @@ describe('Review Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     reviewFormService = TestBed.inject(ReviewFormService);
     reviewService = TestBed.inject(ReviewService);
-    imobService = TestBed.inject(ImobService);
     userService = TestBed.inject(UserService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should call Imob query and add missing value', () => {
-      const review: IReview = { id: 'CBA' };
-      const imobID: IImob = { id: '540a85f6-d249-4461-831f-479f4c190e62' };
-      review.imobID = imobID;
-
-      const imobCollection: IImob[] = [{ id: 'b8ca7a98-d839-4650-8d66-685f5c083b8e' }];
-      jest.spyOn(imobService, 'query').mockReturnValue(of(new HttpResponse({ body: imobCollection })));
-      const additionalImobs = [imobID];
-      const expectedCollection: IImob[] = [...additionalImobs, ...imobCollection];
-      jest.spyOn(imobService, 'addImobToCollectionIfMissing').mockReturnValue(expectedCollection);
-
-      activatedRoute.data = of({ review });
-      comp.ngOnInit();
-
-      expect(imobService.query).toHaveBeenCalled();
-      expect(imobService.addImobToCollectionIfMissing).toHaveBeenCalledWith(
-        imobCollection,
-        ...additionalImobs.map(expect.objectContaining)
-      );
-      expect(comp.imobsSharedCollection).toEqual(expectedCollection);
-    });
-
     it('Should call User query and add missing value', () => {
       const review: IReview = { id: 'CBA' };
       const userID: IUser = { id: '755a9b0b-19a0-44da-866a-57252d2da965' };
@@ -100,15 +74,12 @@ describe('Review Management Update Component', () => {
 
     it('Should update editForm', () => {
       const review: IReview = { id: 'CBA' };
-      const imobID: IImob = { id: 'bbcd528f-435a-417e-b4ab-ffef1c5ce1bd' };
-      review.imobID = imobID;
       const userID: IUser = { id: '7bd9399d-429c-4239-bf9d-3fce67c71d31' };
       review.userID = userID;
 
       activatedRoute.data = of({ review });
       comp.ngOnInit();
 
-      expect(comp.imobsSharedCollection).toContain(imobID);
       expect(comp.usersSharedCollection).toContain(userID);
       expect(comp.review).toEqual(review);
     });
@@ -183,16 +154,6 @@ describe('Review Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
-    describe('compareImob', () => {
-      it('Should forward to imobService', () => {
-        const entity = { id: 'ABC' };
-        const entity2 = { id: 'CBA' };
-        jest.spyOn(imobService, 'compareImob');
-        comp.compareImob(entity, entity2);
-        expect(imobService.compareImob).toHaveBeenCalledWith(entity, entity2);
-      });
-    });
-
     describe('compareUser', () => {
       it('Should forward to userService', () => {
         const entity = { id: 'ABC' };

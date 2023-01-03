@@ -7,8 +7,6 @@ import { finalize, map } from 'rxjs/operators';
 import { ReviewFormService, ReviewFormGroup } from './review-form.service';
 import { IReview } from '../review.model';
 import { ReviewService } from '../service/review.service';
-import { IImob } from 'app/entities/imob/imob.model';
-import { ImobService } from 'app/entities/imob/service/imob.service';
 import { IUser } from 'app/entities/user/user.model';
 import { UserService } from 'app/entities/user/user.service';
 
@@ -20,7 +18,6 @@ export class ReviewUpdateComponent implements OnInit {
   isSaving = false;
   review: IReview | null = null;
 
-  imobsSharedCollection: IImob[] = [];
   usersSharedCollection: IUser[] = [];
 
   editForm: ReviewFormGroup = this.reviewFormService.createReviewFormGroup();
@@ -28,12 +25,9 @@ export class ReviewUpdateComponent implements OnInit {
   constructor(
     protected reviewService: ReviewService,
     protected reviewFormService: ReviewFormService,
-    protected imobService: ImobService,
     protected userService: UserService,
     protected activatedRoute: ActivatedRoute
   ) {}
-
-  compareImob = (o1: IImob | null, o2: IImob | null): boolean => this.imobService.compareImob(o1, o2);
 
   compareUser = (o1: IUser | null, o2: IUser | null): boolean => this.userService.compareUser(o1, o2);
 
@@ -85,17 +79,10 @@ export class ReviewUpdateComponent implements OnInit {
     this.review = review;
     this.reviewFormService.resetForm(this.editForm, review);
 
-    this.imobsSharedCollection = this.imobService.addImobToCollectionIfMissing<IImob>(this.imobsSharedCollection, review.imobID);
     this.usersSharedCollection = this.userService.addUserToCollectionIfMissing<IUser>(this.usersSharedCollection, review.userID);
   }
 
   protected loadRelationshipsOptions(): void {
-    this.imobService
-      .query()
-      .pipe(map((res: HttpResponse<IImob[]>) => res.body ?? []))
-      .pipe(map((imobs: IImob[]) => this.imobService.addImobToCollectionIfMissing<IImob>(imobs, this.review?.imobID)))
-      .subscribe((imobs: IImob[]) => (this.imobsSharedCollection = imobs));
-
     this.userService
       .query()
       .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))

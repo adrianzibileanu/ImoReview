@@ -30,6 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -77,6 +78,7 @@ public class AttachmentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/attachments")
+    @PreAuthorize("hasAuthority('ROLE_SUBSCRIBED')")
     public Mono<ResponseEntity<AttachmentDTO>> createAttachment(@Valid @RequestBody AttachmentDTO attachmentDTO) throws URISyntaxException {
         log.debug("REST request to save Attachment : {}", attachmentDTO);
         if (attachmentDTO.getId() != null) {
@@ -108,6 +110,7 @@ public class AttachmentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/attachments/{id}")
+    @PreAuthorize("hasAuthority('ROLE_SUBSCRIBED')")
     public Mono<ResponseEntity<AttachmentDTO>> updateAttachment(
         @PathVariable(value = "id", required = false) final String id,
         @Valid @RequestBody AttachmentDTO attachmentDTO
@@ -151,6 +154,7 @@ public class AttachmentResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/attachments/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PreAuthorize("hasAuthority('ROLE_SUBSCRIBED')")
     public Mono<ResponseEntity<AttachmentDTO>> partialUpdateAttachment(
         @PathVariable(value = "id", required = false) final String id,
         @NotNull @RequestBody AttachmentDTO attachmentDTO
@@ -192,6 +196,7 @@ public class AttachmentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of attachments in body.
      */
     @GetMapping("/attachments")
+    @PreAuthorize("hasAuthority('ROLE_SUBSCRIBED')")
     public Mono<ResponseEntity<List<AttachmentDTO>>> getAllAttachments(
         @org.springdoc.api.annotations.ParameterObject Pageable pageable,
         ServerHttpRequest request,
@@ -222,6 +227,7 @@ public class AttachmentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the attachmentDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/attachments/{id}")
+    @PreAuthorize("hasAuthority('ROLE_SUBSCRIBED')")
     public Mono<ResponseEntity<AttachmentDTO>> getAttachment(@PathVariable String id) {
         log.debug("REST request to get Attachment : {}", id);
         Mono<AttachmentDTO> attachmentDTO = attachmentService.findOne(id);
@@ -235,6 +241,7 @@ public class AttachmentResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/attachments/{id}")
+    @PreAuthorize("hasAuthority('ROLE_SUBSCRIBED')")
     public Mono<ResponseEntity<Void>> deleteAttachment(@PathVariable String id) {
         log.debug("REST request to delete Attachment : {}", id);
         return attachmentService

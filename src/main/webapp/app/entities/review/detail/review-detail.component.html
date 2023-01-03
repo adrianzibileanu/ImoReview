@@ -26,16 +26,6 @@
         <dd>
           <span>{{ review.rating }}</span>
         </dd>
-        <dt><span jhiTranslate="imoReviewApp.review.isImob">Is Imob</span></dt>
-        <dd>
-          <span>{{ review.isImob }}</span>
-        </dd>
-        <dt><span jhiTranslate="imoReviewApp.review.imobID">Imob ID</span></dt>
-        <dd>
-          <div *ngIf="review.imobID">
-            <a [routerLink]="['/imob', review.imobID.id, 'view']">{{ review.imobID.id }}</a>
-          </div>
-        </dd>
         <dt><span jhiTranslate="imoReviewApp.review.userID">User ID</span></dt>
         <dd>
           <span>{{ review.userID?.login }}</span>

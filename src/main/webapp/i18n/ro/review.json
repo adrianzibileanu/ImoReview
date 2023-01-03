@@ -2,28 +2,27 @@
   "imoReviewApp": {
     "review": {
       "home": {
-        "title": "Recenzii",
-        "refreshListLabel": "Actualizare listă",
-        "createLabel": "Creeare o nouă recenzie",
-        "createOrEditLabel": "Creeare sau editare recenzie",
+        "title": "Reviews",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Creeare o nouă entitate Review",
+        "createOrEditLabel": "Creeare sau editare Review",
         "notFound": "No Reviews found"
       },
       "created": "A fost creată o nouă entitate Review cu identificatorul {{ param }}",
-      "updated": "Recenzia cu numărul {{ param }} a fost actualizată",
-      "deleted": "Recenzia cu numărul {{ param }} a fost ștearsă",
+      "updated": "Review cu identificatorul {{ param }} a fost actualizată",
+      "deleted": "Review cu identificatorul {{ param }} a fost ștearsă",
       "delete": {
-        "question": "Sunteți sigur că doriți să ștergeți recenzia cu numărul {{ id }}?"
+        "question": "Sunteți sigur că doriți să ștergeți Review {{ id }}?"
       },
       "detail": {
-        "title": "Recenzie"
+        "title": "Review"
       },
       "id": "ID",
-      "title": "Titlu",
-      "body": "Comentariu",
+      "title": "Title",
+      "body": "Body",
       "rating": "Rating",
-      "isImob": "Imobil?",
-      "imobID": "ID Imobil",
-      "userID": "ID User"
+      "isImob": "Is Imob",
+      "userID": "User ID"
     }
   }
 }

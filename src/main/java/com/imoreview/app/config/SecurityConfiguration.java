@@ -111,7 +111,10 @@ public class SecurityConfiguration {
             .pathMatchers("/management/health/**").permitAll()
             .pathMatchers("/management/info").permitAll()
             .pathMatchers("/management/prometheus").permitAll()
-            .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN);
+            .pathMatchers("/management/**").hasAuthority(AuthoritiesConstants.ADMIN)
+            .pathMatchers("/api/attachments").hasAuthority(AuthoritiesConstants.SUBSCRIBED);
+
+        // .pathMatchers("/api/attachments").hasAnyAuthority("ADMIN","SUBSCRIBED");
         // @formatter:on
         return http.build();
     }

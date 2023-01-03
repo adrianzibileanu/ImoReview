@@ -79,26 +79,6 @@
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" jhiTranslate="imoReviewApp.review.isImob" for="field_isImob">Is Imob</label>
-          <input type="checkbox" class="form-check" name="isImob" id="field_isImob" data-cy="isImob" formControlName="isImob" />
-        </div>
-
-        <div class="row mb-3">
-          <label class="form-label" jhiTranslate="imoReviewApp.review.imobID" for="field_imobID">Imob ID</label>
-          <select
-            class="form-control"
-            id="field_imobID"
-            data-cy="imobID"
-            name="imobID"
-            formControlName="imobID"
-            [compareWith]="compareImob"
-          >
-            <option [ngValue]="null"></option>
-            <option [ngValue]="imobOption" *ngFor="let imobOption of imobsSharedCollection">{{ imobOption.id }}</option>
-          </select>
-        </div>
-
-        <div class="row mb-3">
           <label class="form-label" jhiTranslate="imoReviewApp.review.userID" for="field_userID">User ID</label>
           <select
             class="form-control"

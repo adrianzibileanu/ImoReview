@@ -1,4 +1,3 @@
-import { IImob } from 'app/entities/imob/imob.model';
 import { IUser } from 'app/entities/user/user.model';
 
 export interface IReview {
@@ -6,8 +5,6 @@ export interface IReview {
   title?: string | null;
   body?: string | null;
   rating?: number | null;
-  isImob?: boolean | null;
-  imobID?: Pick<IImob, 'id'> | null;
   userID?: Pick<IUser, 'id' | 'login'> | null;
 }
 

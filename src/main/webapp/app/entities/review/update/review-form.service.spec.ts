@@ -23,8 +23,6 @@ describe('Review Form Service', () => {
             title: expect.any(Object),
             body: expect.any(Object),
             rating: expect.any(Object),
-            isImob: expect.any(Object),
-            imobID: expect.any(Object),
             userID: expect.any(Object),
           })
         );
@@ -39,8 +37,6 @@ describe('Review Form Service', () => {
             title: expect.any(Object),
             body: expect.any(Object),
             rating: expect.any(Object),
-            isImob: expect.any(Object),
-            imobID: expect.any(Object),
             userID: expect.any(Object),
           })
         );

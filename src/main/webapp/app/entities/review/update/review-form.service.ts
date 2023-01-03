@@ -14,15 +14,13 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type ReviewFormGroupInput = IReview | PartialWithRequiredKeyOf<NewReview>;
 
-type ReviewFormDefaults = Pick<NewReview, 'id' | 'isImob'>;
+type ReviewFormDefaults = Pick<NewReview, 'id'>;
 
 type ReviewFormGroupContent = {
   id: FormControl<IReview['id'] | NewReview['id']>;
   title: FormControl<IReview['title']>;
   body: FormControl<IReview['body']>;
   rating: FormControl<IReview['rating']>;
-  isImob: FormControl<IReview['isImob']>;
-  imobID: FormControl<IReview['imobID']>;
   userID: FormControl<IReview['userID']>;
 };
 
@@ -52,8 +50,6 @@ export class ReviewFormService {
       rating: new FormControl(reviewRawValue.rating, {
         validators: [Validators.required],
       }),
-      isImob: new FormControl(reviewRawValue.isImob),
-      imobID: new FormControl(reviewRawValue.imobID),
       userID: new FormControl(reviewRawValue.userID),
     });
   }
@@ -75,7 +71,6 @@ export class ReviewFormService {
   private getFormDefaults(): ReviewFormDefaults {
     return {
       id: null,
-      isImob: false,
     };
   }
 }

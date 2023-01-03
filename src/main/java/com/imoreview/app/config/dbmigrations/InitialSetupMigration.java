@@ -28,7 +28,9 @@ public class InitialSetupMigration {
         userAuthority = template.save(userAuthority);
         Authority adminAuthority = createAdminAuthority();
         adminAuthority = template.save(adminAuthority);
-        addUsers(userAuthority, adminAuthority);
+        Authority subscribedAuthority = createSubscribedAuthority(); //required by default for the admin user
+        subscribedAuthority = template.save(subscribedAuthority);
+        addUsers(userAuthority, adminAuthority, subscribedAuthority);
     }
 
     @RollbackExecution
@@ -50,10 +52,15 @@ public class InitialSetupMigration {
         return userAuthority;
     }
 
-    private void addUsers(Authority userAuthority, Authority adminAuthority) {
+    private Authority createSubscribedAuthority() {
+        Authority subscribedAuthority = createAuthority(AuthoritiesConstants.SUBSCRIBED);
+        return subscribedAuthority;
+    }
+
+    private void addUsers(Authority userAuthority, Authority adminAuthority, Authority subscribedAuthority) {
         User user = createUser(userAuthority);
         template.save(user);
-        User admin = createAdmin(adminAuthority, userAuthority);
+        User admin = createAdmin(adminAuthority, userAuthority, subscribedAuthority);
         template.save(admin);
     }
 
@@ -73,7 +80,7 @@ public class InitialSetupMigration {
         return userUser;
     }
 
-    private User createAdmin(Authority adminAuthority, Authority userAuthority) {
+    private User createAdmin(Authority adminAuthority, Authority userAuthority, Authority subscribedAuthority) {
         User adminUser = new User();
         adminUser.setId("user-1");
         adminUser.setLogin("admin");
@@ -87,6 +94,7 @@ public class InitialSetupMigration {
         adminUser.setCreatedDate(Instant.now());
         adminUser.getAuthorities().add(adminAuthority);
         adminUser.getAuthorities().add(userAuthority);
+        adminUser.getAuthorities().add(subscribedAuthority);
         return adminUser;
     }
 }

@@ -163,9 +163,6 @@ public class ReviewResource {
                         if (review.getRating() != null) {
                             existingReview.setRating(review.getRating());
                         }
-                        if (review.getIsImob() != null) {
-                            existingReview.setIsImob(review.getIsImob());
-                        }
 
                         return existingReview;
                     })

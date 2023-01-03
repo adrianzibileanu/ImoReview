@@ -56,18 +56,6 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="isImob">
-            <div class="d-flex">
-              <span jhiTranslate="imoReviewApp.review.isImob">Is Imob</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
-          <th scope="col" jhiSortBy="imobID.id">
-            <div class="d-flex">
-              <span jhiTranslate="imoReviewApp.review.imobID">Imob ID</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
           <th scope="col" jhiSortBy="userID.login">
             <div class="d-flex">
               <span jhiTranslate="imoReviewApp.review.userID">User ID</span>
@@ -90,12 +78,6 @@
           <td>{{ review.title }}</td>
           <td>{{ review.body }}</td>
           <td>{{ review.rating }}</td>
-          <td>{{ review.isImob }}</td>
-          <td>
-            <div *ngIf="review.imobID">
-              <a [routerLink]="['/imob', review.imobID.id, 'view']">{{ review.imobID.id }}</a>
-            </div>
-          </td>
           <td>
             {{ review.userID?.login }}
           </td>

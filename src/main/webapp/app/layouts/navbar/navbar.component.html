@@ -92,7 +92,7 @@
               </a>
             </li>
 
-            <li>
+            <li *jhiHasAnyAuthority="['ROLE_ADMIN', 'ROLE_SUBSCRIBED']">
               <a
                 class="dropdown-item"
                 routerLink="attachment"
